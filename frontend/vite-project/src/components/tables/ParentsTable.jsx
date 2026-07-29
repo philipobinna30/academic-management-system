@@ -1,0 +1,122 @@
+import React from "react";
+
+/**
+ * Parents Table Component
+ * Displays list of parents in admin panel
+ */
+
+const ParentsTable = ({ parents = [], onEdit, onDelete }) => {
+  return (
+    <div
+      style={{
+        background: "#fff",
+        borderRadius: "10px",
+        overflowX: "auto",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
+      }}
+    >
+      <table
+        style={{
+          width: "100%",
+          borderCollapse: "collapse",
+        }}
+      >
+        {/* ================= HEADER ================= */}
+        <thead style={{ background: "#f3f4f6" }}>
+          <tr>
+            <th style={thStyle}>S/N</th>
+            <th style={thStyle}>Full Name</th>
+            <th style={thStyle}>Email</th>
+            <th style={thStyle}>Phone</th>
+            <th style={thStyle}>Student</th>
+            <th style={thStyle}>Actions</th>
+          </tr>
+        </thead>
+
+        {/* ================= BODY ================= */}
+        <tbody>
+          {parents.length === 0 ? (
+            <tr>
+              <td colSpan="6" style={emptyStyle}>
+                No parents found
+              </td>
+            </tr>
+          ) : (
+            parents.map((parent, index) => (
+              <tr key={parent.id} style={rowStyle}>
+                <td style={tdStyle}>{index + 1}</td>
+                <td style={tdStyle}>{parent.full_name}</td>
+                <td style={tdStyle}>{parent.email}</td>
+                <td style={tdStyle}>{parent.phone}</td>
+                <td style={tdStyle}>
+                  {parent.student_name || "N/A"}
+                </td>
+
+                <td style={tdStyle}>
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    <button
+                      onClick={() => onEdit?.(parent)}
+                      style={editBtn}
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => onDelete?.(parent.id)}
+                      style={deleteBtn}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+/* ================= STYLES ================= */
+
+const thStyle = {
+  textAlign: "left",
+  padding: "12px",
+  color: "#374151",
+};
+
+const tdStyle = {
+  padding: "12px",
+  color: "#111827",
+};
+
+const rowStyle = {
+  borderBottom: "1px solid #e5e7eb",
+};
+
+const emptyStyle = {
+  textAlign: "center",
+  padding: "20px",
+  color: "#6b7280",
+};
+
+const editBtn = {
+  padding: "6px 10px",
+  border: "none",
+  borderRadius: "5px",
+  background: "#3b82f6",
+  color: "#fff",
+  cursor: "pointer",
+};
+
+const deleteBtn = {
+  padding: "6px 10px",
+  border: "none",
+  borderRadius: "5px",
+  background: "#ef4444",
+  color: "#fff",
+  cursor: "pointer",
+};
+
+export default ParentsTable;

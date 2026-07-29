@@ -1,0 +1,56 @@
+# ==========================
+# Environment
+# ==========================
+backend/.env
+.env
+.env.*
+!.env.example
+
+# ==========================
+# Python
+# ==========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+.venv/
+venv/
+
+.pytest_cache/
+.mypy_cache/
+
+# ==========================
+# React / Node
+# ==========================
+node_modules/
+dist/
+build/
+
+# ==========================
+# VS Code
+# ==========================
+.vscode/
+
+# ==========================
+# Logs
+# ==========================
+*.log
+
+# ==========================
+# OS Files
+# ==========================
+.DS_Store
+Thumbs.db
+
+
+
+
+
+# ==========================
+# Generated Reports
+# ==========================
+backend/generated_reports/
+backend/generated_reports/**
+backend/*.pdf
+backend/**/*.pdf

@@ -1,0 +1,38 @@
+# -------------------- CORE API --------------------
+fastapi==0.110.0
+uvicorn[standard]==0.29.0
+
+# -------------------- DATA VALIDATION --------------------
+pydantic==2.6.4
+pydantic-settings==2.1.0
+
+# -------------------- DATABASE --------------------
+sqlalchemy==2.0.29
+psycopg2-binary==2.9.9
+
+# -------------------- AUTH & SECURITY --------------------
+passlib[bcrypt]==1.7.4
+bcrypt==3.2.2
+python-jose[cryptography]==3.3.0
+
+# -------------------- EMAIL --------------------
+aiosmtplib==2.0.2
+email-validator==2.1.1
+
+# -------------------- ENVIRONMENT --------------------
+python-dotenv==1.0.1
+
+# -------------------- FILE UPLOADS --------------------
+python-multipart==0.0.9
+
+# -------------------- REPORTING --------------------
+reportlab==4.1.0
+qrcode[pil]==7.4.2
+Pillow==10.2.0
+
+# -------------------- HTTP CLIENT (FIXED VERSIONS) --------------------
+requests==2.31.0
+urllib3==1.26.18
+charset_normalizer==2.1.1
+idna==3.6
+certifi==2024.2.2

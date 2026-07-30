@@ -31,4 +31,113 @@ The backend exposes a secure REST API developed with FastAPI, while the frontend
 ![Git](https://img.shields.io/badge/Git-Version_Control-F05032?logo=git)
 ![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?logo=github)
 
+
+
+## 📖 Project Overview
+
+The Academic Management System is a modern, full-stack web application designed to simplify and automate school administration. It provides a secure, role-based platform where administrators, teachers, students, and parents can efficiently manage academic activities from a single system.
+
+The application is built with a RESTful FastAPI backend and a modern React frontend, using PostgreSQL as the primary database. Authentication is secured using JSON Web Tokens (JWT), ensuring protected access to resources based on user roles.
+
+The project focuses on performance, scalability, maintainability, and real-world deployment practices, making it suitable for educational institutions of different sizes.
+
+
+
+## ✨ Features
+
+### 👨‍💼 Administrator
+- User Management
+- Student Registration
+- Teacher Management
+- Parent Management
+- Course Management
+- Subject Management
+- Academic Sessions
+- School Terms
+- Result Publishing
+- Transcript Generation
+- PDF Result Printing
+- Audit Logging
+- Role & Permission Management
+
+### 👨‍🏫 Teacher
+- Teacher Dashboard
+- Assigned Courses
+- Student Score Entry
+- Bulk Score Upload
+- Result Preview
+- Online Classes
+- Student Performance Tracking
+
+### 👨‍🎓 Student
+- Secure Login
+- Personal Profile
+- View Results
+- Download PDF Results
+- View Academic Transcript
+- Online Classes
+
+### 🔐 Authentication
+- JWT Authentication
+- Password Hashing
+- Password Reset
+- Email Verification
+- Protected Routes
+- Role-Based Authorization
+
+
+
+## 🏗️ Project Architecture
+
+```
+Academic Management System
+│
+├── Backend (FastAPI)
+│   ├── Authentication
+│   ├── CRUD Operations
+│   ├── SQLAlchemy Models
+│   ├── Pydantic Schemas
+│   ├── PostgreSQL Database
+│   ├── JWT Security
+│   └── PDF Report Generation
+│
+├── Frontend (React + Vite)
+│   ├── Admin Dashboard
+│   ├── Teacher Dashboard
+│   ├── Student Portal
+│   ├── Protected Routes
+│   ├── API Services
+│   └── Responsive UI
+│
+└── PostgreSQL Database
+```
+
+
+
+
+## 📂 Folder Structure
+
+```
+academic-management-system/
+│
+├── backend/
+│   ├── auth.py
+│   ├── crud.py
+│   ├── database.py
+│   ├── main.py
+│   ├── models.py
+│   ├── schemas.py
+│   └── requirements.txt
+│
+├── frontend/
+│   └── vite-project/
+│       ├── src/
+│       ├── public/
+│       └── package.json
+│
+├── .gitignore
+├── README.md
+└── LICENSE
+```
+
 The application emphasizes security through JWT authentication, password hashing, role-based authorization, audit logging, email verification, and password reset functionality.

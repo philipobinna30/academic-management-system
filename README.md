@@ -16,4 +16,19 @@ The system supports three primary user roles:
 
 The backend exposes a secure REST API developed with FastAPI, while the frontend delivers a responsive user experience using React and Vite. PostgreSQL serves as the primary relational database, with SQLAlchemy providing ORM support for efficient data management.
 
+
+
+## 🚀 Tech Stack
+
+![Python](https://img.shields.io/badge/Python-3.13-blue?logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-336791?logo=postgresql)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-ORM-red)
+![Pydantic](https://img.shields.io/badge/Pydantic-Validation-E92063)
+![JWT](https://img.shields.io/badge/JWT-Authentication-black?logo=jsonwebtokens)
+![React](https://img.shields.io/badge/React-Frontend-61DAFB?logo=react)
+![Vite](https://img.shields.io/badge/Vite-Build-646CFF?logo=vite)
+![Git](https://img.shields.io/badge/Git-Version_Control-F05032?logo=git)
+![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?logo=github)
+
 The application emphasizes security through JWT authentication, password hashing, role-based authorization, audit logging, email verification, and password reset functionality.

@@ -1,166 +1,388 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+import "./Scores.css";
 
 // ======================================================
 // SERVICES
 // ======================================================
+
 import {
-  getAllScores,
   createScore,
+  getAllScores,
   updateScore,
   deleteScore,
 } from "../../../services/scoreService";
 
-import { getAllStudents } from "../../../services/studentService";
-import { getSubjects } from "../../../services/subjectService";
-import { getTerms } from "../../../services/termService";
-import { getCourses } from "../../../services/courseService";
+import {
+  getAllStudents,
+} from "../../../services/studentService";
+
+import {
+  getSubjects,
+} from "../../../services/subjectService";
+
+import {
+  getTerms,
+} from "../../../services/termService";
+
+import {
+  getCourses,
+} from "../../../services/courseService";
+
+// ======================================================
+// COMPONENTS
+// ======================================================
 
 import Loader from "../../../components/common/Loader";
 import ErrorMessage from "../../../components/common/ErrorMessage";
 
+// ======================================================
+// ICONS
+// ======================================================
+
+import {
+  FaClipboardCheck,
+  FaSearch,
+  FaUserGraduate,
+  FaBook,
+  FaSchool,
+  FaCalendarAlt,
+  FaPercentage,
+  FaEdit,
+  FaTrash,
+  FaPlus,
+  FaTimes,
+  FaChartLine,
+} from "react-icons/fa";
+
+/**
+ * ======================================================
+ * SCORES PAGE
+ * Backend Compatible
+ * Professional UI
+ * ======================================================
+ */
+
 const Scores = () => {
+
   // ======================================================
   // STATE
   // ======================================================
 
-  const [scores, setScores] = useState([]);
+  const [scores, setScores] =
+    useState([]);
 
-  const [students, setStudents] = useState([]);
-  const [subjects, setSubjects] = useState([]);
-  const [terms, setTerms] = useState([]);
-  const [courses, setCourses] = useState([]);
+  const [students, setStudents] =
+    useState([]);
 
-  const [loading, setLoading] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [subjects, setSubjects] =
+    useState([]);
 
-  const [errorMsg, setErrorMsg] = useState("");
+  const [courses, setCourses] =
+    useState([]);
 
-  const [editingId, setEditingId] = useState(null);
+  const [terms, setTerms] =
+    useState([]);
 
-  const [form, setForm] = useState({
-    student_id: "",
-    subject_id: "",
-    term_id: "",
-    marks: "",
-  });
+  const [loading, setLoading] =
+    useState(false);
+
+  const [submitting, setSubmitting] =
+    useState(false);
+
+  const [errorMsg, setErrorMsg] =
+    useState("");
+
+  const [editingId, setEditingId] =
+    useState(null);
+
+  // ======================================================
+  // SEARCH
+  // ======================================================
+
+  const [search, setSearch] =
+    useState("");
+
+  // ======================================================
+  // FORM
+  // ======================================================
+
+  const [form, setForm] =
+    useState({
+
+      student_id: "",
+
+      subject_id: "",
+
+      course_id: "",
+
+      term_id: "",
+
+      marks: "",
+
+    });
+
+  // ======================================================
+  // DASHBOARD STATISTICS
+  // ======================================================
+
+  const totalScores =
+    scores.length;
+
+  const averageScore =
+    totalScores > 0
+      ? (
+          scores.reduce(
+            (sum, item) =>
+              sum +
+              Number(
+                item.marks || 0
+              ),
+            0
+          ) / totalScores
+        ).toFixed(1)
+      : "0.0";
+
+  const passedScores =
+    scores.filter(
+      (item) =>
+        Number(item.marks) >= 40
+    ).length;
+
+  const failedScores =
+    scores.filter(
+      (item) =>
+        Number(item.marks) < 40
+    ).length;
+
+  // ======================================================
+  // SEARCH FILTER
+  // ======================================================
+
+  const filteredScores =
+    useMemo(() => {
+
+      if (!search.trim()) {
+
+        return scores;
+
+      }
+
+      const keyword =
+        search.toLowerCase();
+
+      return scores.filter(
+        (score) =>
+
+          score.student_name
+            ?.toLowerCase()
+            .includes(keyword)
+
+          ||
+
+          score.subject_name
+            ?.toLowerCase()
+            .includes(keyword)
+
+          ||
+
+          score.course_name
+            ?.toLowerCase()
+            .includes(keyword)
+
+      );
+
+    }, [scores, search]);
+
+  // ======================================================
+  // GRADE HELPER
+  // ======================================================
+
+  const getGrade = (
+    marks
+  ) => {
+
+    const score =
+      Number(marks);
+
+    if (score >= 70)
+      return "A";
+
+    if (score >= 60)
+      return "B";
+
+    if (score >= 50)
+      return "C";
+
+    if (score >= 45)
+      return "D";
+
+    if (score >= 40)
+      return "E";
+
+    return "F";
+
+  };
+
+  // ======================================================
+  // GRADE BADGE
+  // ======================================================
+
+  const getGradeClass = (
+    marks
+  ) => {
+
+    const grade =
+      getGrade(marks);
+
+    switch (grade) {
+
+      case "A":
+        return "grade-a";
+
+      case "B":
+        return "grade-b";
+
+      case "C":
+        return "grade-c";
+
+      case "D":
+        return "grade-d";
+
+      case "E":
+        return "grade-e";
+
+      default:
+        return "grade-f";
+
+    }
+
+  };
 
   // ======================================================
   // FETCH DATA
   // ======================================================
 
   const fetchData = async () => {
+
     try {
+
       setLoading(true);
+
       setErrorMsg("");
 
       const [
+
         scoresData,
+
         studentsData,
+
         subjectsData,
+
         termsData,
+
         coursesData,
+
       ] = await Promise.all([
+
         getAllScores(),
+
         getAllStudents(),
+
         getSubjects(),
+
         getTerms(),
+
         getCourses(),
+
       ]);
 
-      setScores(Array.isArray(scoresData) ? scoresData : []);
-      setStudents(Array.isArray(studentsData) ? studentsData : []);
-      setSubjects(Array.isArray(subjectsData) ? subjectsData : []);
-      setTerms(Array.isArray(termsData) ? termsData : []);
-      setCourses(Array.isArray(coursesData) ? coursesData : []);
+      setScores(
+        Array.isArray(scoresData)
+          ? scoresData
+          : []
+      );
+
+      setStudents(
+        Array.isArray(studentsData)
+          ? studentsData
+          : []
+      );
+
+      setSubjects(
+        Array.isArray(subjectsData)
+          ? subjectsData
+          : []
+      );
+
+      setTerms(
+        Array.isArray(termsData)
+          ? termsData
+          : []
+      );
+
+      setCourses(
+        Array.isArray(coursesData)
+          ? coursesData
+          : []
+      );
+
     } catch (error) {
-      console.error("Failed to fetch scores:", error);
-      setErrorMsg(error?.message || "Failed to load scores");
+
+      console.error(error);
+
+      setErrorMsg(
+
+        error?.message ||
+
+        "Failed to load scores."
+
+      );
+
     } finally {
+
       setLoading(false);
+
     }
+
   };
 
+  // ======================================================
+  // INIT
+  // ======================================================
+
   useEffect(() => {
+
     fetchData();
+
   }, []);
 
   // ======================================================
-  // LOOKUP MAPS
-  // ======================================================
-
-  const studentMap = Object.fromEntries(
-    students.map((student) => [
-      student.id,
-      student?.full_name ||
-        student?.user?.full_name ||
-        `Student ${student.id}`,
-    ])
-  );
-
-  const subjectMap = Object.fromEntries(
-    subjects.map((subject) => [subject.id, subject.name])
-  );
-
-  const termMap = Object.fromEntries(
-    terms.map((term) => [term.id, term.name])
-  );
-
-  const courseMap = Object.fromEntries(
-    courses.map((course) => [course.id, course.name])
-  );
-
-  // ======================================================
-  // FILTER SUBJECTS BY SELECTED STUDENT COURSE
-  // ======================================================
-
-  const selectedStudent = students.find(
-    (student) =>
-      String(student.id) === String(form.student_id)
-  );
-
-  const filteredSubjects = selectedStudent
-    ? subjects.filter(
-        (subject) =>
-          Number(subject.course_id) ===
-          Number(selectedStudent.course_id)
-      )
-    : [];
-
-  // ======================================================
-  // HELPERS
-  // ======================================================
-
-  const getStudentName = (id) =>
-    studentMap[id] || `Student ${id}`;
-
-  const getSubjectName = (id) =>
-    subjectMap[id] || "N/A";
-
-  const getTermName = (id) =>
-    termMap[id] || "N/A";
-
-  const getCourseName = (id) =>
-    courseMap[id] || "N/A";
-
-  // ======================================================
-  // HANDLE CHANGE
+  // INPUT CHANGE
   // ======================================================
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
 
-    setForm((prev) => {
-      const updated = {
-        ...prev,
-        [name]: value,
-      };
+    const {
 
-      if (name === "student_id") {
-        updated.subject_id = "";
-      }
+      name,
 
-      return updated;
-    });
+      value,
+
+    } = e.target;
+
+    setForm((prev) => ({
+
+      ...prev,
+
+      [name]: value,
+
+    }));
+
   };
 
   // ======================================================
@@ -168,14 +390,25 @@ const Scores = () => {
   // ======================================================
 
   const resetForm = () => {
+
     setForm({
+
       student_id: "",
+
       subject_id: "",
+
+      course_id: "",
+
       term_id: "",
+
       marks: "",
+
     });
 
     setEditingId(null);
+
+    setErrorMsg("");
+
   };
 
   // ======================================================
@@ -183,71 +416,151 @@ const Scores = () => {
   // ======================================================
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
 
+    if (submitting) return;
+
     try {
+
       setSubmitting(true);
+
       setErrorMsg("");
 
       const payload = {
-        student_id: Number(form.student_id),
-        subject_id: Number(form.subject_id),
-        term_id: Number(form.term_id),
-        marks: Number(form.marks),
+
+        student_id: Number(
+          form.student_id
+        ),
+
+        subject_id: Number(
+          form.subject_id
+        ),
+
+        course_id: Number(
+          form.course_id
+        ),
+
+        term_id: Number(
+          form.term_id
+        ),
+
+        marks: Number(
+          form.marks
+        ),
+
       };
 
-      if (!payload.student_id)
-        throw new Error("Please select a student");
+      // ------------------------------------
+      // VALIDATION
+      // ------------------------------------
 
-      if (!payload.subject_id)
-        throw new Error("Please select a subject");
+      if (!payload.student_id) {
 
-      if (!payload.term_id)
-        throw new Error("Please select a term");
-
-      if (
-        payload.marks < 0 ||
-        payload.marks > 100
-      ) {
         throw new Error(
-          "Marks must be between 0 and 100"
+          "Please select a student."
         );
+
       }
 
+      if (!payload.subject_id) {
+
+        throw new Error(
+          "Please select a subject."
+        );
+
+      }
+
+      if (!payload.course_id) {
+
+        throw new Error(
+          "Please select a course."
+        );
+
+      }
+
+      if (!payload.term_id) {
+
+        throw new Error(
+          "Please select a term."
+        );
+
+      }
+
+      if (
+
+        isNaN(payload.marks) ||
+
+        payload.marks < 0 ||
+
+        payload.marks > 100
+
+      ) {
+
+        throw new Error(
+          "Marks must be between 0 and 100."
+        );
+
+      }
+
+      // ------------------------------------
+      // UPDATE
+      // ------------------------------------
+
       if (editingId) {
-        const updated = await updateScore(
+
+        await updateScore(
+
           editingId,
+
+          payload
+
+        );
+
+        alert(
+          "Score updated successfully."
+        );
+
+      }
+
+      // ------------------------------------
+      // CREATE
+      // ------------------------------------
+
+      else {
+
+        await createScore(
           payload
         );
 
-        setScores((prev) =>
-          prev.map((s) =>
-            s.id === editingId ? updated : s
-          )
+        alert(
+          "Score added successfully."
         );
 
-        alert("Score updated successfully");
-      } else {
-        const created = await createScore(payload);
-
-        setScores((prev) => [
-          created,
-          ...prev,
-        ]);
-
-        alert("Score created successfully");
       }
 
       resetForm();
+
+      await fetchData();
+
     } catch (error) {
-      console.error("Save score failed:", error);
+
+      console.error(error);
+
       setErrorMsg(
+
         error?.message ||
-          "Failed to save score"
+
+        "Failed to save score."
+
       );
+
     } finally {
+
       setSubmitting(false);
+
     }
+
   };
 
   // ======================================================
@@ -255,23 +568,41 @@ const Scores = () => {
   // ======================================================
 
   const handleEdit = (score) => {
-    setForm({
-      student_id: String(
-        score.student_id || ""
-      ),
-      subject_id: String(
-        score.subject_id || ""
-      ),
-      term_id: String(score.term_id || ""),
-      marks: String(score.marks || ""),
-    });
 
     setEditingId(score.id);
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
+    setForm({
+
+      student_id: String(
+        score.student_id || ""
+      ),
+
+      subject_id: String(
+        score.subject_id || ""
+      ),
+
+      course_id: String(
+        score.course_id || ""
+      ),
+
+      term_id: String(
+        score.term_id || ""
+      ),
+
+      marks: String(
+        score.marks ?? ""
+      ),
+
     });
+
+    window.scrollTo({
+
+      top: 0,
+
+      behavior: "smooth",
+
+    });
+
   };
 
   // ======================================================
@@ -279,24 +610,39 @@ const Scores = () => {
   // ======================================================
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this score?"))
-      return;
+
+    const confirmed = window.confirm(
+      "Delete this score?"
+    );
+
+    if (!confirmed) return;
 
     try {
+
+      setErrorMsg("");
+
       await deleteScore(id);
 
-      setScores((prev) =>
-        prev.filter((s) => s.id !== id)
+      alert(
+        "Score deleted successfully."
       );
 
-      alert("Score deleted successfully");
+      await fetchData();
+
     } catch (error) {
-      console.error("Delete failed:", error);
+
+      console.error(error);
+
       setErrorMsg(
+
         error?.message ||
-          "Failed to delete score"
+
+        "Failed to delete score."
+
       );
+
     }
+
   };
 
   // ======================================================
@@ -304,211 +650,660 @@ const Scores = () => {
   // ======================================================
 
   return (
-    <div>
-      <div style={{ marginBottom: "25px" }}>
-        <h2>Student Scores</h2>
 
-        <p style={{ color: "#6b7280" }}>
-          Scores entered here automatically
-          generate student results, GPA,
-          averages, and transcript data.
-        </p>
+    <div className="scores-page">
+
+      {/* ======================================================
+          HEADER
+      ====================================================== */}
+
+      <div className="scores-header">
+
+        <div>
+
+          <h1>
+            Score Management
+          </h1>
+
+          <p>
+            Record, edit and manage student scores for all
+            academic courses and terms.
+          </p>
+
+        </div>
+
       </div>
 
-      {/* FORM */}
+      {/* ======================================================
+          DASHBOARD STATISTICS
+      ====================================================== */}
 
-      <form
-        onSubmit={handleSubmit}
-        style={formStyle}
-      >
-        <select
-          name="student_id"
-          value={form.student_id}
-          onChange={handleChange}
-        >
-          <option value="">
-            Select Student
-          </option>
+      <div className="score-stats">
 
-          {students.map((s) => (
-            <option
-              key={s.id}
-              value={s.id}
-            >
-              {s?.full_name ||
-                s?.user?.full_name ||
-                `Student ${s.id}`}
-            </option>
-          ))}
-        </select>
+        <div className="stat-card blue">
 
-        <select
-          name="subject_id"
-          value={form.subject_id}
-          onChange={handleChange}
-        >
-          <option value="">
-            {form.student_id
-              ? "Select Subject"
-              : "Select Student First"}
-          </option>
+          <div className="stat-icon">
 
-          {filteredSubjects.map((s) => (
-            <option
-              key={s.id}
-              value={s.id}
-            >
-              {s.name}
-            </option>
-          ))}
-        </select>
+            <FaClipboardCheck />
 
-        <select
-          name="term_id"
-          value={form.term_id}
-          onChange={handleChange}
-        >
-          <option value="">
-            Select Term
-          </option>
+          </div>
 
-          {terms.map((t) => (
-            <option
-              key={t.id}
-              value={t.id}
-            >
-              {t.name}
-            </option>
-          ))}
-        </select>
+          <div>
 
-        <input
-          type="number"
-          name="marks"
-          value={form.marks}
-          onChange={handleChange}
-          min="0"
-          max="100"
-          placeholder="Marks"
-        />
+            <h2>{totalScores}</h2>
 
-        <button
-          type="submit"
-          disabled={submitting}
-        >
-          {submitting
-            ? "Processing..."
-            : editingId
+            <span>Total Scores</span>
+
+          </div>
+
+        </div>
+
+        <div className="stat-card green">
+
+          <div className="stat-icon">
+
+            <FaChartLine />
+
+          </div>
+
+          <div>
+
+            <h2>{averageScore}</h2>
+
+            <span>Average Score</span>
+
+          </div>
+
+        </div>
+
+        <div className="stat-card emerald">
+
+          <div className="stat-icon">
+
+            <FaPercentage />
+
+          </div>
+
+          <div>
+
+            <h2>{passedScores}</h2>
+
+            <span>Passed</span>
+
+          </div>
+
+        </div>
+
+        <div className="stat-card red">
+
+          <div className="stat-icon">
+
+            <FaTimes />
+
+          </div>
+
+          <div>
+
+            <h2>{failedScores}</h2>
+
+            <span>Failed</span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* ======================================================
+          SEARCH
+      ====================================================== */}
+
+      <div className="search-card">
+
+        <div className="search-box">
+
+          <FaSearch className="search-icon" />
+
+          <input
+
+            type="text"
+
+            placeholder="Search by student, subject or course..."
+
+            value={search}
+
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
+
+          />
+
+        </div>
+
+      </div>
+
+      {/* ======================================================
+          FORM CARD
+      ====================================================== */}
+
+      <div className="score-form-card">
+
+        <h2>
+
+          {editingId
+
             ? "Update Score"
-            : "Create Score"}
-        </button>
 
-        {editingId && (
-          <button
-            type="button"
-            onClick={resetForm}
-          >
-            Cancel
-          </button>
-        )}
-      </form>
+            : "Add New Score"}
+
+        </h2>
+
+        <form
+
+          onSubmit={handleSubmit}
+
+          className="score-form"
+
+        >
+
+          {/* Student */}
+
+          <div className="form-group">
+
+            <FaUserGraduate className="form-icon" />
+
+            <select
+
+              name="student_id"
+
+              value={form.student_id}
+
+              onChange={handleChange}
+
+              required
+
+            >
+
+              <option value="">
+
+                Select Student
+
+              </option>
+
+              {students.map((student) => (
+
+                <option
+
+                  key={student.id}
+
+                  value={student.id}
+
+                >
+
+                  {student.full_name}
+
+                </option>
+
+              ))}
+
+            </select>
+
+          </div>
+
+          {/* Subject */}
+
+          <div className="form-group">
+
+            <FaBook className="form-icon" />
+
+            <select
+
+              name="subject_id"
+
+              value={form.subject_id}
+
+              onChange={handleChange}
+
+              required
+
+            >
+
+              <option value="">
+
+                Select Subject
+
+              </option>
+
+              {subjects.map((subject) => (
+
+                <option
+
+                  key={subject.id}
+
+                  value={subject.id}
+
+                >
+
+                  {subject.name}
+
+                </option>
+
+              ))}
+
+            </select>
+
+          </div>
+
+          {/* Course */}
+
+          <div className="form-group">
+
+            <FaSchool className="form-icon" />
+
+            <select
+
+              name="course_id"
+
+              value={form.course_id}
+
+              onChange={handleChange}
+
+              required
+
+            >
+
+              <option value="">
+
+                Select Course
+
+              </option>
+
+              {courses.map((course) => (
+
+                <option
+
+                  key={course.id}
+
+                  value={course.id}
+
+                >
+
+                  {course.name}
+
+                </option>
+
+              ))}
+
+            </select>
+
+          </div>
+
+          {/* Term */}
+
+          <div className="form-group">
+
+            <FaCalendarAlt className="form-icon" />
+
+            <select
+
+              name="term_id"
+
+              value={form.term_id}
+
+              onChange={handleChange}
+
+              required
+
+            >
+
+              <option value="">
+
+                Select Term
+
+              </option>
+
+              {terms.map((term) => (
+
+                <option
+
+                  key={term.id}
+
+                  value={term.id}
+
+                >
+
+                  {term.name}
+
+                </option>
+
+              ))}
+
+            </select>
+
+          </div>
+
+          {/* Marks */}
+
+          <div className="form-group">
+
+            <FaPercentage className="form-icon" />
+
+            <input
+
+              type="number"
+
+              name="marks"
+
+              placeholder="Score"
+
+              min="0"
+
+              max="100"
+
+              value={form.marks}
+
+              onChange={handleChange}
+
+              required
+
+            />
+
+          </div>
+
+          <div className="score-buttons">
+
+            <button
+
+              type="submit"
+
+              className="save-btn"
+
+              disabled={submitting}
+
+            >
+
+              {submitting
+
+                ? "Processing..."
+
+                : editingId ? (
+
+                    <>
+
+                      <FaEdit />
+
+                      Update Score
+
+                    </>
+
+                  ) : (
+
+                    <>
+
+                      <FaPlus />
+
+                      Save Score
+
+                    </>
+
+                  )}
+
+            </button>
+
+            {editingId && (
+
+              <button
+
+                type="button"
+
+                className="cancel-btn"
+
+                onClick={resetForm}
+
+              >
+
+                <FaTimes />
+
+                Cancel
+
+              </button>
+
+            )}
+
+          </div>
+
+        </form>
+
+      </div>
+
+      {/* ======================================================
+          ERROR
+      ====================================================== */}
 
       {errorMsg && (
+
         <ErrorMessage
+
           message={errorMsg}
+
         />
+
       )}
+
+      {/* ======================================================
+          CONTENT
+      ====================================================== */}
 
       {loading ? (
+
         <Loader />
-      ) : scores.length === 0 ? (
-        <p>No scores available</p>
+
+      ) : filteredScores.length === 0 ? (
+
+        <div className="empty-state">
+
+          <FaClipboardCheck />
+
+          <h3>No Scores Found</h3>
+
+          <p>
+
+            No score records match your current search.
+
+          </p>
+
+        </div>
+
       ) : (
-        <table style={tableStyle}>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Student</th>
-              <th>Course</th>
-              <th>Subject</th>
-              <th>Term</th>
-              <th>Marks</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
 
-          <tbody>
-            {scores.map((score) => (
-              <tr key={score.id}>
-                <td>{score.id}</td>
+        <div className="table-wrapper">
 
-                <td>
-                  {getStudentName(
-                    score.student_id
-                  )}
-                </td>
+          <table className="scores-table">
 
-                <td>
-                  {getCourseName(
-                    score.course_id
-                  )}
-                </td>
+            <thead>
 
-                <td>
-                  {score?.subject?.name ||
-                    getSubjectName(
-                      score.subject_id
-                    )}
-                </td>
+              <tr>
 
-                <td>
-                  {getTermName(
-                    score.term_id
-                  )}
-                </td>
+                <th>Student</th>
 
-                <td>{score.marks}</td>
+                <th>Subject</th>
 
-                <td>
-                  <button
-                    onClick={() =>
-                      handleEdit(score)
-                    }
-                  >
-                    Edit
-                  </button>
+                <th>Course</th>
 
-                  <button
-                    onClick={() =>
-                      handleDelete(score.id)
-                    }
-                  >
-                    Delete
-                  </button>
-                </td>
+                <th>Term</th>
+
+                <th>Marks</th>
+
+                <th>Grade</th>
+
+                <th>Actions</th>
+
               </tr>
-            ))}
-          </tbody>
-        </table>
+
+            </thead>
+
+            <tbody>
+
+              {filteredScores.map((score) => (
+
+                <tr key={score.id}>
+
+                  {/* ==========================================
+                      STUDENT
+                  ========================================== */}
+
+                  <td>
+
+                    <div className="student-cell">
+
+                      <div className="student-avatar">
+
+                        {score.student_name
+                          ?.charAt(0)
+                          ?.toUpperCase() || "S"}
+
+                      </div>
+
+                      <div>
+
+                        <strong>
+
+                          {score.student_name ||
+                            "Unknown"}
+
+                        </strong>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+                  {/* ==========================================
+                      SUBJECT
+                  ========================================== */}
+
+                  <td>
+
+                    {score.subject_name ||
+                      "N/A"}
+
+                  </td>
+
+                  {/* ==========================================
+                      COURSE
+                  ========================================== */}
+
+                  <td>
+
+                    {score.course_name ||
+                      "N/A"}
+
+                  </td>
+
+                  {/* ==========================================
+                      TERM
+                  ========================================== */}
+
+                  <td>
+
+                    {score.term_name ||
+                      "N/A"}
+
+                  </td>
+
+                  {/* ==========================================
+                      MARKS
+                  ========================================== */}
+
+                  <td>
+
+                    <span className="marks-badge">
+
+                      {score.marks}
+
+                    </span>
+
+                  </td>
+
+                  {/* ==========================================
+                      GRADE
+                  ========================================== */}
+
+                  <td>
+
+                    <span
+                      className={`grade-badge ${getGradeClass(
+                        score.marks
+                      )}`}
+                    >
+
+                      {getGrade(score.marks)}
+
+                    </span>
+
+                  </td>
+
+                  {/* ==========================================
+                      ACTIONS
+                  ========================================== */}
+
+                  <td>
+
+                    <div className="action-buttons">
+
+                      <button
+
+                        className="edit-btn"
+
+                        onClick={() =>
+                          handleEdit(score)
+                        }
+
+                      >
+
+                        <FaEdit />
+
+                        Edit
+
+                      </button>
+
+                      <button
+
+                        className="delete-btn"
+
+                        onClick={() =>
+                          handleDelete(score.id)
+                        }
+
+                      >
+
+                        <FaTrash />
+
+                        Delete
+
+                      </button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              ))}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
       )}
+
     </div>
+
   );
-};
 
-// ======================================================
-// STYLES
-// ======================================================
-
-const formStyle = {
-  display: "flex",
-  gap: "10px",
-  flexWrap: "wrap",
-  marginBottom: "20px",
-};
-
-const tableStyle = {
-  width: "100%",
-  borderCollapse: "collapse",
 };
 
 export default Scores;

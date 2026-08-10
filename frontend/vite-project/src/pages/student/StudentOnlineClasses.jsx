@@ -3,6 +3,8 @@ import React, {
   useState,
 } from "react";
 
+import "./StudentOnlineClasses.css";
+
 import { useAuth } from "../../context/AuthContext";
 
 // ======================================================
@@ -13,6 +15,19 @@ import {
   getStudentOnlineClasses,
 } from "../../services/onlineClassService";
 
+// ======================================================
+// COMPONENTS
+// ======================================================
+
+import Loader from "../../components/common/Loader";
+import ErrorMessage from "../../components/common/ErrorMessage";
+
+/**
+ * ======================================================
+ * Student Online Classes
+ * ======================================================
+ */
+
 const StudentOnlineClasses = () => {
   const { user } = useAuth();
 
@@ -20,9 +35,14 @@ const StudentOnlineClasses = () => {
   // STATES
   // ======================================================
 
-  const [classes, setClasses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [errorMsg, setErrorMsg] = useState("");
+  const [classes, setClasses] =
+    useState([]);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [errorMsg, setErrorMsg] =
+    useState("");
 
   // ======================================================
   // LOAD CLASSES
@@ -43,16 +63,24 @@ const StudentOnlineClasses = () => {
       setLoading(true);
       setErrorMsg("");
 
-      const data = await getStudentOnlineClasses();
+      const data =
+        await getStudentOnlineClasses();
 
-      const safeData = Array.isArray(data) ? data : [];
+      const safeData =
+        Array.isArray(data)
+          ? data
+          : [];
 
       setClasses(safeData);
     } catch (error) {
-      console.error("Online class error:", error);
+      console.error(
+        "Online class error:",
+        error
+      );
 
       setErrorMsg(
-        error?.message || "Failed to load online classes"
+        error?.message ||
+          "Failed to load online classes"
       );
 
       setClasses([]);
@@ -66,21 +94,34 @@ const StudentOnlineClasses = () => {
   // ======================================================
 
   const formatDate = (value) => {
-    if (!value) return "N/A";
+    if (!value) {
+      return "N/A";
+    }
+
     try {
-      return new Date(value).toLocaleDateString();
+      return new Date(
+        value
+      ).toLocaleDateString();
     } catch {
       return "Invalid Date";
     }
   };
 
   const formatTime = (value) => {
-    if (!value) return "N/A";
+    if (!value) {
+      return "N/A";
+    }
+
     try {
-      return new Date(value).toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+      return new Date(
+        value
+      ).toLocaleTimeString(
+        [],
+        {
+          hour: "2-digit",
+          minute: "2-digit",
+        }
+      );
     } catch {
       return "Invalid Time";
     }
@@ -91,28 +132,47 @@ const StudentOnlineClasses = () => {
   // ======================================================
 
   if (loading) {
-    return (
-      <div>
-        <h3>Loading online classes...</h3>
-      </div>
-    );
+    return <Loader />;
   }
 
+  // ======================================================
+  // RENDER
+  // ======================================================
+
   return (
-    <div>
+    <div className="student-online-classes">
 
       {/* ======================================================
           HEADER
       ====================================================== */}
 
-      <div style={{ marginBottom: "30px" }}>
-        <h1 style={{ fontSize: "30px", marginBottom: "10px" }}>
-          Online Classes
-        </h1>
+      <div className="online-classes-header">
 
-        <p style={{ color: "#6b7280" }}>
-          Join your scheduled online classes
-        </p>
+        <div>
+
+          <h1>
+            Online Classes
+          </h1>
+
+          <p>
+            Join your scheduled
+            online classes
+          </p>
+
+        </div>
+
+        <div className="classes-count">
+
+          <span>
+            {classes.length}
+          </span>
+
+          <small>
+            Classes
+          </small>
+
+        </div>
+
       </div>
 
       {/* ======================================================
@@ -120,143 +180,218 @@ const StudentOnlineClasses = () => {
       ====================================================== */}
 
       {errorMsg && (
-        <div
-          style={{
-            background: "#fee2e2",
-            color: "#b91c1c",
-            padding: "15px",
-            borderRadius: "8px",
-            marginBottom: "20px",
-          }}
-        >
-          {errorMsg}
-        </div>
+        <ErrorMessage
+          message={errorMsg}
+        />
       )}
 
       {/* ======================================================
           EMPTY STATE
       ====================================================== */}
 
-      {!loading && classes.length === 0 && !errorMsg && (
-        <div
-          style={{
-            background: "#fff",
-            padding: "20px",
-            borderRadius: "10px",
-            boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
-          }}
-        >
-          <h3 style={{ marginBottom: "8px" }}>
-            No Online Classes Yet
-          </h3>
+      {!loading &&
+        classes.length === 0 &&
+        !errorMsg && (
 
-          <p style={{ color: "#6b7280" }}>
-            Your scheduled classes will appear here once your teacher publishes them.
-          </p>
-        </div>
-      )}
+          <div className="online-classes-empty">
+
+            <div className="empty-icon">
+              📚
+            </div>
+
+            <h3>
+              No Online Classes Yet
+            </h3>
+
+            <p>
+              Your scheduled classes
+              will appear here once
+              your teacher publishes
+              them.
+            </p>
+
+          </div>
+
+        )}
 
       {/* ======================================================
           CLASSES GRID
       ====================================================== */}
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "20px",
-        }}
-      >
-        {classes.map((cls, index) => {
-          const isCompleted = cls?.end_time
-            ? new Date(cls.end_time) < new Date()
-            : false;
+      {classes.length > 0 && (
 
-          return (
-            <div
-              key={cls?.id || index}
-              style={{
-                background: "#fff",
-                padding: "20px",
-                borderRadius: "10px",
-                boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
-              }}
-            >
-              <h3 style={{ marginBottom: "10px" }}>
-                {cls?.title || "Untitled Class"}
-              </h3>
+        <div className="online-classes-grid">
 
-              <p
-                style={{
-                  color: "#6b7280",
-                  marginBottom: "15px",
-                }}
-              >
-                {cls?.description || "No description available"}
-              </p>
+          {classes.map(
+            (cls, index) => {
 
-              <ClassInfo label="Subject ID" value={cls?.subject_id || "N/A"} />
-              <ClassInfo label="Term ID" value={cls?.term_id || "N/A"} />
-              <ClassInfo label="Date" value={formatDate(cls?.start_time)} />
-              <ClassInfo label="Start Time" value={formatTime(cls?.start_time)} />
-              <ClassInfo label="End Time" value={formatTime(cls?.end_time)} />
+              const isCompleted =
+                cls?.end_time
+                  ? new Date(
+                      cls.end_time
+                    ) < new Date()
+                  : false;
 
-              {/* STATUS */}
-              <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-                <span
-                  style={{
-                    padding: "6px 12px",
-                    borderRadius: "999px",
-                    fontSize: "13px",
-                    fontWeight: "600",
-                    background: isCompleted ? "#dcfce7" : "#dbeafe",
-                    color: isCompleted ? "#166534" : "#1d4ed8",
-                  }}
+              return (
+
+                <div
+                  key={
+                    cls?.id ||
+                    index
+                  }
+                  className={`online-class-card ${
+                    isCompleted
+                      ? "completed"
+                      : "upcoming"
+                  }`}
                 >
-                  {isCompleted ? "Completed" : "Upcoming"}
-                </span>
-              </div>
 
-              {/* JOIN BUTTON */}
-              {cls?.meeting_link ? (
-                <a
-                  href={cls.meeting_link}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    display: "block",
-                    textAlign: "center",
-                    padding: "12px",
-                    borderRadius: "6px",
-                    background: isCompleted ? "#9ca3af" : "#2563eb",
-                    color: "#fff",
-                    fontWeight: "600",
-                    textDecoration: "none",
-                    pointerEvents: isCompleted ? "none" : "auto",
-                  }}
-                >
-                  {isCompleted ? "Class Completed" : "Join Class"}
-                </a>
-              ) : (
-                <button
-                  disabled
-                  style={{
-                    width: "100%",
-                    padding: "12px",
-                    borderRadius: "6px",
-                    background: "#9ca3af",
-                    color: "#fff",
-                    border: "none",
-                    cursor: "not-allowed",
-                  }}
-                >
-                  No Meeting Link
-                </button>
-              )}
-            </div>
-          );
-        })}
-      </div>
+                  {/* ==================================================
+                      CARD HEADER
+                  ================================================== */}
+
+                  <div className="online-class-card-header">
+
+                    <div>
+
+                      <h3>
+                        {cls?.title ||
+                          "Untitled Class"}
+                      </h3>
+
+                      <span className="class-id">
+                        Class #
+                        {cls?.id ||
+                          "N/A"}
+                      </span>
+
+                    </div>
+
+                    <span
+                      className={`class-status ${
+                        isCompleted
+                          ? "completed-status"
+                          : "upcoming-status"
+                      }`}
+                    >
+                      {isCompleted
+                        ? "Completed"
+                        : "Upcoming"}
+                    </span>
+
+                  </div>
+
+                  {/* ==================================================
+                      DESCRIPTION
+                  ================================================== */}
+
+                  <p className="online-class-description">
+                    {cls?.description ||
+                      "No description available."}
+                  </p>
+
+                  {/* ==================================================
+                      CLASS INFORMATION
+                  ================================================== */}
+
+                  <div className="class-info-list">
+
+                    <ClassInfo
+                      label="Subject ID"
+                      value={
+                        cls?.subject_id ||
+                        "N/A"
+                      }
+                    />
+
+                    <ClassInfo
+                      label="Term ID"
+                      value={
+                        cls?.term_id ||
+                        "N/A"
+                      }
+                    />
+
+                    <ClassInfo
+                      label="Date"
+                      value={formatDate(
+                        cls?.start_time
+                      )}
+                    />
+
+                    <ClassInfo
+                      label="Start Time"
+                      value={formatTime(
+                        cls?.start_time
+                      )}
+                    />
+
+                    <ClassInfo
+                      label="End Time"
+                      value={formatTime(
+                        cls?.end_time
+                      )}
+                    />
+
+                  </div>
+
+                  {/* ==================================================
+                      JOIN BUTTON
+                  ================================================== */}
+
+                  <div className="class-action">
+
+                    {cls?.meeting_link ? (
+
+                      <a
+                        href={
+                          cls.meeting_link
+                        }
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`join-class-button ${
+                          isCompleted
+                            ? "disabled"
+                            : ""
+                        }`}
+                        onClick={
+                          isCompleted
+                            ? (
+                                event
+                              ) =>
+                                event.preventDefault()
+                            : undefined
+                        }
+                      >
+                        {isCompleted
+                          ? "Class Completed"
+                          : "Join Class"}
+                      </a>
+
+                    ) : (
+
+                      <button
+                        type="button"
+                        disabled
+                        className="join-class-button no-link"
+                      >
+                        No Meeting Link
+                      </button>
+
+                    )}
+
+                  </div>
+
+                </div>
+
+              );
+            }
+          )}
+
+        </div>
+
+      )}
+
     </div>
   );
 };
@@ -265,12 +400,25 @@ const StudentOnlineClasses = () => {
 // CLASS INFO COMPONENT
 // ======================================================
 
-const ClassInfo = ({ label, value }) => {
+const ClassInfo = ({
+  label,
+  value,
+}) => {
+
   return (
-    <p style={{ color: "#4b5563", marginBottom: "6px", fontSize: "14px" }}>
-      <strong>{label}:</strong> {value}
-    </p>
+    <div className="class-info-row">
+
+      <span className="class-info-label">
+        {label}
+      </span>
+
+      <span className="class-info-value">
+        {value}
+      </span>
+
+    </div>
   );
 };
 
 export default StudentOnlineClasses;
+

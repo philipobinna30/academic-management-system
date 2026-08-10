@@ -1,0 +1,225 @@
+/* ======================================================
+   TeacherSubjects.css
+====================================================== */
+
+.teacher-subjects-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ======================================================
+   HEADER
+====================================================== */
+
+.teacher-subjects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  padding: 24px 28px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.teacher-subjects-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #1e293b;
+}
+
+.teacher-subjects-header p {
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ======================================================
+   SUMMARY CARDS
+====================================================== */
+
+.subject-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+}
+
+.summary-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  transition: all 0.25s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-4px);
+}
+
+.summary-card h3 {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.summary-card span {
+  display: block;
+  margin-top: 12px;
+  font-size: 34px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+/* ======================================================
+   SEARCH BAR
+====================================================== */
+
+.subject-toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.subject-toolbar input {
+  width: 340px;
+  max-width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #ffffff;
+  font-size: 14px;
+  transition: all 0.25s ease;
+}
+
+.subject-toolbar input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+/* ======================================================
+   TABLE
+====================================================== */
+
+.table-wrapper {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow-x: auto;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.subjects-table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+}
+
+.subjects-table thead {
+  background: #2563eb;
+}
+
+.subjects-table thead th {
+  color: #ffffff;
+  padding: 16px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.subjects-table tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+  transition: background 0.25s ease;
+}
+
+.subjects-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.subjects-table td {
+  padding: 15px;
+  color: #374151;
+  font-size: 14px;
+}
+
+/* ======================================================
+   EMPTY STATE
+====================================================== */
+
+.empty-state {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 60px 30px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.empty-state h3 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 24px;
+}
+
+.empty-state p {
+  margin-top: 12px;
+  color: #64748b;
+  font-size: 15px;
+}
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+
+@media (max-width: 992px) {
+
+  .teacher-subjects-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .subject-toolbar {
+    justify-content: stretch;
+  }
+
+  .subject-toolbar input {
+    width: 100%;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .teacher-subjects-header {
+    padding: 20px;
+  }
+
+  .teacher-subjects-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .subject-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-card span {
+    font-size: 28px;
+  }
+
+}
+
+@media (max-width: 576px) {
+
+  .teacher-subjects-header {
+    padding: 18px;
+  }
+
+  .teacher-subjects-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .subjects-table {
+    min-width: 600px;
+  }
+
+}

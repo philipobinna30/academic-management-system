@@ -1,4 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from "react";
+
+import "./OnlineClasses.css";
+
+// ======================================================
+// SERVICES
+// ======================================================
 
 import {
   getOnlineClasses,
@@ -15,12 +24,32 @@ import {
   getTerms,
 } from "../../../services/termService";
 
+// ======================================================
+// COMPONENTS
+// ======================================================
+
 import Loader from "../../../components/common/Loader";
 import ErrorMessage from "../../../components/common/ErrorMessage";
 
+// ======================================================
+// ICONS
+// ======================================================
+
+import {
+  FaVideo,
+  FaBook,
+  FaClock,
+  FaLink,
+  FaPlusCircle,
+  FaEdit,
+  FaTrash,
+} from "react-icons/fa";
+
 /**
- * Online Classes Page (Admin)
- * Fully aligned with backend structure
+ * ======================================================
+ * ONLINE CLASSES MANAGEMENT
+ * Professional Dashboard Version
+ * ======================================================
  */
 
 const OnlineClasses = () => {
@@ -28,64 +57,105 @@ const OnlineClasses = () => {
   // ======================================================
   // STATE
   // ======================================================
-  const [classes, setClasses] = useState([]);
-  const [subjects, setSubjects] = useState([]);
-  const [terms, setTerms] = useState([]);
 
-  const [loading, setLoading] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [classes, setClasses] =
+    useState([]);
 
-  const [errorMsg, setErrorMsg] = useState("");
+  const [subjects, setSubjects] =
+    useState([]);
 
-  const [form, setForm] = useState({
-    title: "",
-    description: "",
-    meeting_link: "",
-    subject_id: "",
-    term_id: "",
-    start_time: "",
-    end_time: "",
-  });
+  const [terms, setTerms] =
+    useState([]);
 
-  const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] =
+    useState(false);
+
+  const [submitting, setSubmitting] =
+    useState(false);
+
+  const [errorMsg, setErrorMsg] =
+    useState("");
+
+  const [editingId, setEditingId] =
+    useState(null);
+
+  const [form, setForm] =
+    useState({
+
+      title: "",
+
+      description: "",
+
+      meeting_link: "",
+
+      subject_id: "",
+
+      term_id: "",
+
+      start_time: "",
+
+      end_time: "",
+
+    });
 
   // ======================================================
   // FETCH DATA
   // ======================================================
+
   const fetchData = async () => {
 
-    setLoading(true);
-
     try {
+
+      setLoading(true);
 
       setErrorMsg("");
 
       const [
+
         classesData,
+
         subjectsData,
+
         termsData,
+
       ] = await Promise.all([
+
         getOnlineClasses(),
+
         getSubjects(),
+
         getTerms(),
+
       ]);
 
       setClasses(
+
         Array.isArray(classesData)
+
           ? classesData
+
           : []
+
       );
 
       setSubjects(
+
         Array.isArray(subjectsData)
+
           ? subjectsData
+
           : []
+
       );
 
       setTerms(
+
         Array.isArray(termsData)
+
           ? termsData
+
           : []
+
       );
 
     } catch (error) {
@@ -96,227 +166,331 @@ const OnlineClasses = () => {
       );
 
       setErrorMsg(
+
         error?.response?.data?.detail ||
-        "Failed to load online classes"
+
+        error?.message ||
+
+        "Failed to load online classes."
+
       );
 
     } finally {
 
       setLoading(false);
+
     }
+
   };
 
   // ======================================================
-  // INIT
+  // INITIAL LOAD
   // ======================================================
+
   useEffect(() => {
+
     fetchData();
+
   }, []);
 
   // ======================================================
-  // HANDLE CHANGE
+  // HANDLE INPUT
   // ======================================================
+
   const handleChange = (e) => {
 
-    const { name, value } = e.target;
+    const {
+
+      name,
+
+      value,
+
+    } = e.target;
 
     setForm((prev) => ({
+
       ...prev,
+
       [name]: value,
+
     }));
+
   };
 
   // ======================================================
-  // SUBMIT
+  // RESET FORM
   // ======================================================
+
+  const resetForm = () => {
+
+    setForm({
+
+      title: "",
+
+      description: "",
+
+      meeting_link: "",
+
+      subject_id: "",
+
+      term_id: "",
+
+      start_time: "",
+
+      end_time: "",
+
+    });
+
+    setEditingId(null);
+
+  };
+
+  // ======================================================
+  // CREATE / UPDATE
+  // ======================================================
+
   const handleSubmit = async (e) => {
 
     e.preventDefault();
 
-    setSubmitting(true);
+    if (submitting) return;
 
     try {
+
+      setSubmitting(true);
 
       setErrorMsg("");
 
       const payload = {
-        title: form.title.trim(),
-        description: form.description.trim(),
-        meeting_link: form.meeting_link.trim(),
-        subject_id: Number(form.subject_id),
-        term_id: Number(form.term_id),
-        start_time: form.start_time,
-        end_time: form.end_time,
+
+        title:
+          form.title.trim(),
+
+        description:
+          form.description.trim(),
+
+        meeting_link:
+          form.meeting_link.trim(),
+
+        subject_id:
+          Number(form.subject_id),
+
+        term_id:
+          Number(form.term_id),
+
+        start_time:
+          form.start_time,
+
+        end_time:
+          form.end_time,
+
       };
 
-      // ==================================================
+      // ================================================
       // UPDATE
-      // ==================================================
+      // ================================================
+
       if (editingId) {
 
         await updateOnlineClass(
+
           editingId,
+
           payload
+
         );
 
         alert(
-          "Online class updated successfully"
+          "Online class updated successfully."
         );
 
-      } else {
-
-        // ==================================================
-        // CREATE
-        // ==================================================
-        await createOnlineClass(payload);
-
-        alert(
-          "Online class created successfully"
-        );
       }
 
-      // ==================================================
-      // RESET
-      // ==================================================
-      setForm({
-        title: "",
-        description: "",
-        meeting_link: "",
-        subject_id: "",
-        term_id: "",
-        start_time: "",
-        end_time: "",
-      });
+      // ================================================
+      // CREATE
+      // ================================================
 
-      setEditingId(null);
+      else {
 
-      // ==================================================
-      // REFRESH
-      // ==================================================
-      fetchData();
+        await createOnlineClass(
+
+          payload
+
+        );
+
+        alert(
+          "Online class created successfully."
+        );
+
+      }
+
+      resetForm();
+
+      await fetchData();
 
     } catch (error) {
 
-      console.error(
-        "Failed to save online class:",
-        error
-      );
+      console.error(error);
 
       setErrorMsg(
+
         error?.response?.data?.detail ||
-        "Failed to save online class"
+
+        error?.message ||
+
+        "Failed to save online class."
+
       );
 
     } finally {
 
       setSubmitting(false);
+
     }
+
   };
 
   // ======================================================
   // EDIT
   // ======================================================
+
   const handleEdit = (item) => {
 
+    setEditingId(item.id);
+
     setForm({
-      title: item?.title || "",
+
+      title:
+        item.title || "",
+
       description:
-        item?.description || "",
+        item.description || "",
+
       meeting_link:
-        item?.meeting_link || "",
+        item.meeting_link || "",
+
       subject_id:
-        item?.subject_id || "",
+        item.subject_id || "",
+
       term_id:
-        item?.term_id || "",
+        item.term_id || "",
+
       start_time:
-        item?.start_time
-          ?.slice(0, 16) || "",
+        item.start_time?.slice(0, 16) || "",
+
       end_time:
-        item?.end_time
-          ?.slice(0, 16) || "",
+        item.end_time?.slice(0, 16) || "",
+
     });
 
-    setEditingId(item.id);
+    window.scrollTo({
+
+      top: 0,
+
+      behavior: "smooth",
+
+    });
+
   };
 
   // ======================================================
   // DELETE
   // ======================================================
+
   const handleDelete = async (id) => {
 
-    if (
-      !window.confirm(
-        "Delete this online class?"
-      )
-    ) {
-      return;
-    }
+    const confirmed = window.confirm(
+
+      "Delete this online class?"
+
+    );
+
+    if (!confirmed) return;
 
     try {
 
       await deleteOnlineClass(id);
 
       alert(
-        "Online class deleted successfully"
+        "Online class deleted successfully."
       );
 
       setClasses((prev) =>
+
         prev.filter(
-          (item) => item.id !== id
+
+          (item) =>
+
+            item.id !== id
+
         )
+
       );
 
     } catch (error) {
 
-      console.error(
-        "Delete failed:",
-        error
-      );
+      console.error(error);
 
       setErrorMsg(
+
         error?.response?.data?.detail ||
-        "Failed to delete online class"
+
+        error?.message ||
+
+        "Failed to delete online class."
+
       );
+
     }
+
   };
 
   // ======================================================
   // HELPERS
   // ======================================================
+
   const getSubjectName = (id) => {
 
     const subject = subjects.find(
+
       (item) => item.id === id
+
     );
 
     return subject?.name || "N/A";
+
   };
 
   const getTermName = (id) => {
 
     const term = terms.find(
+
       (item) => item.id === id
+
     );
 
     return term?.name || "N/A";
+
   };
 
   // ======================================================
-  // UI
+  // RENDER
   // ======================================================
-  return (
-    <div>
+
+  return (    <div className="online-classes-page">
 
       {/* ======================================================
           HEADER
       ====================================================== */}
-      <div style={{ marginBottom: "20px" }}>
 
-        <h2>Online Classes</h2>
+      <div className="online-header">
 
-        <p style={{ color: "#6b7280" }}>
-          Manage virtual classes,
-          schedules, and meeting links.
+        <h1>
+          Online Classes
+        </h1>
+
+        <p>
+          Manage virtual classes, schedules and meeting links.
         </p>
 
       </div>
@@ -324,242 +498,363 @@ const OnlineClasses = () => {
       {/* ======================================================
           FORM
       ====================================================== */}
-      <form
-        onSubmit={handleSubmit}
-        style={formStyle}
-      >
 
-        <input
-          name="title"
-          placeholder="Class Title"
-          value={form.title}
-          onChange={handleChange}
-          required
-        />
+      <div className="online-form-card">
 
-        <input
-          name="description"
-          placeholder="Description"
-          value={form.description}
-          onChange={handleChange}
-          required
-        />
+        <h2>
 
-        <input
-          name="meeting_link"
-          placeholder="Meeting Link"
-          value={form.meeting_link}
-          onChange={handleChange}
-          required
-        />
+          <FaPlusCircle />
 
-        {/* SUBJECT */}
-        <select
-          name="subject_id"
-          value={form.subject_id}
-          onChange={handleChange}
-          required
+          {editingId
+            ? "Update Online Class"
+            : "Create Online Class"}
+
+        </h2>
+
+        <form
+          className="online-form"
+          onSubmit={handleSubmit}
         >
 
-          <option value="">
-            Select Subject
-          </option>
+          {/* TITLE */}
 
-          {subjects.map((subject) => (
+          <input
+            type="text"
+            name="title"
+            placeholder="Class Title"
+            value={form.title}
+            onChange={handleChange}
+            required
+          />
 
-            <option
-              key={subject.id}
-              value={subject.id}
-            >
-              {subject.name}
+          {/* DESCRIPTION */}
+
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={form.description}
+            onChange={handleChange}
+            required
+          />
+
+          {/* MEETING LINK */}
+
+          <input
+            type="url"
+            name="meeting_link"
+            placeholder="Meeting Link"
+            value={form.meeting_link}
+            onChange={handleChange}
+            required
+          />
+
+          {/* SUBJECT */}
+
+          <select
+            name="subject_id"
+            value={form.subject_id}
+            onChange={handleChange}
+            required
+          >
+
+            <option value="">
+              Select Subject
             </option>
 
-          ))}
+            {subjects.map((subject) => (
 
-        </select>
+              <option
+                key={subject.id}
+                value={subject.id}
+              >
+                {subject.name}
+              </option>
 
-        {/* TERM */}
-        <select
-          name="term_id"
-          value={form.term_id}
-          onChange={handleChange}
-          required
-        >
+            ))}
 
-          <option value="">
-            Select Term
-          </option>
+          </select>
 
-          {terms.map((term) => (
+          {/* TERM */}
 
-            <option
-              key={term.id}
-              value={term.id}
-            >
-              {term.name}
+          <select
+            name="term_id"
+            value={form.term_id}
+            onChange={handleChange}
+            required
+          >
+
+            <option value="">
+              Select Term
             </option>
 
-          ))}
+            {terms.map((term) => (
 
-        </select>
+              <option
+                key={term.id}
+                value={term.id}
+              >
+                {term.name}
+              </option>
 
-        <input
-          type="datetime-local"
-          name="start_time"
-          value={form.start_time}
-          onChange={handleChange}
-          required
-        />
+            ))}
 
-        <input
-          type="datetime-local"
-          name="end_time"
-          value={form.end_time}
-          onChange={handleChange}
-          required
-        />
+          </select>
 
-        <button
-          type="submit"
-          disabled={submitting}
-        >
-          {submitting
-            ? "Processing..."
-            : editingId
-            ? "Update Class"
-            : "Create Class"}
-        </button>
+          {/* START */}
 
-      </form>
+          <input
+            type="datetime-local"
+            name="start_time"
+            value={form.start_time}
+            onChange={handleChange}
+            required
+          />
+
+          {/* END */}
+
+          <input
+            type="datetime-local"
+            name="end_time"
+            value={form.end_time}
+            onChange={handleChange}
+            required
+          />
+
+          <button
+            type="submit"
+            className="online-submit-btn"
+            disabled={submitting}
+          >
+
+            {submitting
+
+              ? "Processing..."
+
+              : editingId
+
+              ? "Update Class"
+
+              : "Create Class"}
+
+          </button>
+
+        </form>
+
+      </div>
 
       {/* ======================================================
           ERROR
       ====================================================== */}
+
       {errorMsg && (
+
         <ErrorMessage
           message={errorMsg}
         />
+
       )}
 
       {/* ======================================================
-          TABLE
+          CONTENT
       ====================================================== */}
+
       {loading ? (
 
         <Loader />
 
       ) : classes.length === 0 ? (
 
-        <p>No online classes found</p>
+        <div className="online-empty">
+
+          <FaVideo />
+
+          <h3>
+            No Online Classes Found
+          </h3>
+
+          <p>
+            Create your first online class to begin scheduling virtual lessons.
+          </p>
+
+        </div>
 
       ) : (
 
-        <table style={tableStyle}>
+        <div className="online-table-wrapper">
 
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Subject</th>
-              <th>Term</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Meeting</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+          <table className="online-table">
 
-          <tbody>
+            <thead>
 
-            {classes.map((item) => (
+              <tr>
 
-              <tr key={item.id}>
+                <th>Title</th>
 
-                <td>{item.title}</td>
+                <th>Subject</th>
 
-                <td>
-                  {getSubjectName(
-                    item.subject_id
-                  )}
-                </td>
+                <th>Term</th>
 
-                <td>
-                  {getTermName(
-                    item.term_id
-                  )}
-                </td>
+                <th>Start Time</th>
 
-                <td>
-                  {new Date(
-                    item.start_time
-                  ).toLocaleString()}
-                </td>
+                <th>End Time</th>
 
-                <td>
-                  {new Date(
-                    item.end_time
-                  ).toLocaleString()}
-                </td>
+                <th>Meeting</th>
 
-                <td>
-
-                  <a
-                    href={item.meeting_link}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Join
-                  </a>
-
-                </td>
-
-                <td>
-
-                  <button
-                    onClick={() =>
-                      handleEdit(item)
-                    }
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    onClick={() =>
-                      handleDelete(item.id)
-                    }
-                  >
-                    Delete
-                  </button>
-
-                </td>
+                <th>Actions</th>
 
               </tr>
 
-            ))}
+            </thead>
 
-          </tbody>
+            <tbody>
 
-        </table>
+              {classes.map((item) => (
+
+                <tr key={item.id}>
+
+                  {/* TITLE */}
+
+                  <td>
+
+                    <strong>
+
+                      {item.title}
+
+                    </strong>
+
+                    <br />
+
+                    <small>
+
+                      {item.description}
+
+                    </small>
+
+                  </td>
+
+                  {/* SUBJECT */}
+
+                  <td>
+
+                    <FaBook />
+
+                    {" "}
+
+                    {getSubjectName(item.subject_id)}
+
+                  </td>
+
+                  {/* TERM */}
+
+                  <td>
+
+                    {getTermName(item.term_id)}
+
+                  </td>
+
+                  {/* START */}
+
+                  <td>
+
+                    <FaClock />
+
+                    {" "}
+
+                    {new Date(
+                      item.start_time
+                    ).toLocaleString()}
+
+                  </td>
+
+                  {/* END */}
+
+                  <td>
+
+                    <FaClock />
+
+                    {" "}
+
+                    {new Date(
+                      item.end_time
+                    ).toLocaleString()}
+
+                  </td>
+
+                  {/* LINK */}
+
+                  <td>
+
+                    <a
+                      href={item.meeting_link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="join-link"
+                    >
+
+                      <FaLink />
+
+                      {" "}
+
+                      Join
+
+                    </a>
+
+                  </td>
+
+                  {/* ACTIONS */}
+
+                  <td>
+
+                    <div className="online-actions">
+
+                      <button
+                        type="button"
+                        className="edit-btn"
+                        onClick={() =>
+                          handleEdit(item)
+                        }
+                      >
+
+                        <FaEdit />
+
+                        Edit
+
+                      </button>
+
+                      <button
+                        type="button"
+                        className="delete-btn"
+                        onClick={() =>
+                          handleDelete(item.id)
+                        }
+                      >
+
+                        <FaTrash />
+
+                        Delete
+
+                      </button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              ))}
+
+            </tbody>
+
+          </table>
+
+        </div>
 
       )}
 
     </div>
+
   );
-};
 
-/* ======================================================
-   STYLES
-====================================================== */
-
-const formStyle = {
-  display: "flex",
-  gap: "10px",
-  flexWrap: "wrap",
-  marginBottom: "20px",
-};
-
-const tableStyle = {
-  width: "100%",
-  borderCollapse: "collapse",
 };
 
 export default OnlineClasses;

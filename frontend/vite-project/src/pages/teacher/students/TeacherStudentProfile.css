@@ -1,0 +1,292 @@
+/* ======================================================
+   TeacherStudentProfile.css
+====================================================== */
+
+.teacher-student-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ======================================================
+   HEADER
+====================================================== */
+
+.teacher-student-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  background: #ffffff;
+  padding: 24px 28px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+.teacher-student-header h1 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 1.9rem;
+}
+
+.teacher-student-header p {
+  margin-top: 8px;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+/* ======================================================
+   PROFILE CARD
+====================================================== */
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  flex-shrink: 0;
+}
+
+.profile-details {
+  flex: 1;
+}
+
+.profile-details h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 1.6rem;
+}
+
+.profile-details p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.profile-details svg {
+  color: #2563eb;
+}
+
+/* ======================================================
+   GRID
+====================================================== */
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+/* ======================================================
+   ROW CARD
+====================================================== */
+
+.profile-row {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+  transition: all 0.25s ease;
+}
+
+.profile-row:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+}
+
+.profile-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #2563eb;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.profile-label svg {
+  font-size: 18px;
+}
+
+.profile-value {
+  color: #374151;
+  font-size: 15px;
+  word-break: break-word;
+  line-height: 1.5;
+}
+
+/* ======================================================
+   STATUS BADGES
+====================================================== */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-badge.inactive {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.status-badge svg {
+  font-size: 14px;
+}
+
+/* ======================================================
+   BUTTONS
+====================================================== */
+
+.profile-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 22px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.25s ease;
+}
+
+.back-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+/* ======================================================
+   EMPTY STATE
+====================================================== */
+
+.empty-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 60px 30px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+.empty-icon {
+  font-size: 70px;
+  color: #9ca3af;
+  margin-bottom: 18px;
+}
+
+.empty-card h2 {
+  margin-bottom: 12px;
+  color: #1f2937;
+}
+
+.empty-card p {
+  color: #6b7280;
+  margin-bottom: 28px;
+}
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+
+@media (max-width: 992px) {
+
+  .teacher-student-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .profile-details p {
+    justify-content: center;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .teacher-student-header {
+    padding: 20px;
+  }
+
+  .teacher-student-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .profile-card {
+    padding: 20px;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-row {
+    padding: 16px;
+  }
+
+}
+
+@media (max-width: 576px) {
+
+  .teacher-student-header {
+    padding: 18px;
+  }
+
+  .teacher-student-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .profile-avatar {
+    width: 70px;
+    height: 70px;
+    font-size: 32px;
+  }
+
+  .profile-details h2 {
+    font-size: 1.25rem;
+  }
+
+  .back-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+}

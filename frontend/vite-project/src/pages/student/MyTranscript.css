@@ -1,0 +1,691 @@
+
+/* ======================================================
+   MY TRANSCRIPT
+   ====================================================== */
+
+.my-transcript {
+  width: 100%;
+  min-height: 100vh;
+  padding: 30px;
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eff6ff 0%,
+      #f8fafc 48%,
+      #eef2ff 100%
+    );
+}
+
+
+/* ======================================================
+   PAGE HEADER
+   ====================================================== */
+
+.my-transcript-header {
+  margin-bottom: 30px;
+}
+
+.my-transcript-header h1 {
+  margin: 0 0 8px;
+
+  color: #111827;
+
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.my-transcript-header p {
+  margin: 0;
+
+  color: #6b7280;
+
+  font-size: 15px;
+}
+
+
+/* ======================================================
+   SUCCESS MESSAGE
+   ====================================================== */
+
+.transcript-success {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 20px;
+  padding: 14px 18px;
+
+  background: #dcfce7;
+
+  border-left: 4px solid #16a34a;
+  border-radius: 8px;
+
+  color: #166534;
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+/* ======================================================
+   ERROR MESSAGE
+   ====================================================== */
+
+.transcript-error {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 15px;
+
+  margin-bottom: 20px;
+  padding: 14px 18px;
+
+  background: #fee2e2;
+
+  border-left: 4px solid #dc2626;
+  border-radius: 8px;
+
+  color: #b91c1c;
+
+  font-size: 14px;
+}
+
+.error-content {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.message-icon {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 24px;
+  height: 24px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.6);
+
+  font-weight: 700;
+}
+
+
+/* ======================================================
+   RETRY BUTTON
+   ====================================================== */
+
+.retry-button {
+  flex-shrink: 0;
+
+  padding: 8px 15px;
+
+  border: none;
+  border-radius: 6px;
+
+  background: #2563eb;
+
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.retry-button:hover {
+  background: #1d4ed8;
+
+  transform: translateY(-1px);
+}
+
+.retry-button:active {
+  transform: translateY(0);
+}
+
+
+/* ======================================================
+   TRANSCRIPT PREVIEW
+   ====================================================== */
+
+.transcript-preview {
+  width: 100%;
+  max-width: 850px;
+
+  margin: 0 auto;
+
+  padding: 35px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border-radius: 16px;
+
+  border-top: 5px solid #2563eb;
+
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ======================================================
+   SCHOOL HEADER
+   ====================================================== */
+
+.transcript-school-header {
+  padding-bottom: 25px;
+
+  text-align: center;
+
+  border-bottom:
+    1px solid #e5e7eb;
+}
+
+.school-logo {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 72px;
+  height: 72px;
+
+  margin: 0 auto 12px;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #dbeafe,
+      #e0e7ff
+    );
+
+  font-size: 38px;
+
+  box-shadow:
+    0 4px 12px rgba(37, 99, 235, 0.12);
+}
+
+.transcript-school-header h2 {
+  margin: 0 0 7px;
+
+  color: #111827;
+
+  font-size: 25px;
+  font-weight: 800;
+
+  letter-spacing: 0.5px;
+}
+
+.school-motto {
+  margin: 0 0 7px;
+
+  color: #2563eb;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  letter-spacing: 1.5px;
+}
+
+.school-address {
+  margin: 0 0 10px;
+
+  color: #6b7280;
+
+  font-size: 13px;
+}
+
+.school-contact {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 15px;
+
+  color: #6b7280;
+
+  font-size: 12px;
+}
+
+
+/* ======================================================
+   TRANSCRIPT TITLE
+   ====================================================== */
+
+.transcript-title {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  margin: 28px 0;
+}
+
+.transcript-title h3 {
+  margin: 0;
+
+  color: #1e3a8a;
+
+  font-size: 18px;
+  font-weight: 800;
+
+  text-align: center;
+
+  white-space: nowrap;
+}
+
+.title-line {
+  flex: 1;
+
+  height: 1px;
+
+  background:
+    linear-gradient(
+      to right,
+      transparent,
+      #bfdbfe
+    );
+}
+
+.title-line:last-child {
+  background:
+    linear-gradient(
+      to left,
+      transparent,
+      #bfdbfe
+    );
+}
+
+
+/* ======================================================
+   STUDENT INFORMATION
+   ====================================================== */
+
+.student-information {
+  margin-bottom: 25px;
+
+  padding: 22px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fafc,
+      #eff6ff
+    );
+
+  border: 1px solid #dbeafe;
+
+  border-radius: 12px;
+}
+
+.information-header {
+  margin-bottom: 18px;
+}
+
+.information-header h3 {
+  margin: 0;
+
+  color: #1f2937;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+
+/* ======================================================
+   STUDENT INFO GRID
+   ====================================================== */
+
+.student-info-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 0 25px;
+}
+
+
+/* ======================================================
+   TRANSCRIPT INFO ITEM
+   ====================================================== */
+
+.transcript-info-item {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 15px;
+
+  min-height: 52px;
+
+  padding: 10px 0;
+
+  border-bottom:
+    1px solid #e5e7eb;
+}
+
+.transcript-info-label {
+  color: #6b7280;
+
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.transcript-info-value {
+  color: #111827;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  text-align: right;
+
+  word-break: break-word;
+}
+
+
+/* ======================================================
+   TRANSCRIPT NOTICE
+   ====================================================== */
+
+.transcript-notice {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 15px;
+
+  margin-bottom: 25px;
+
+  padding: 18px;
+
+  background: #fffbeb;
+
+  border: 1px solid #fde68a;
+
+  border-radius: 10px;
+}
+
+.notice-icon {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  border-radius: 8px;
+
+  background: #fef3c7;
+
+  font-size: 20px;
+}
+
+.transcript-notice h4 {
+  margin: 0 0 5px;
+
+  color: #92400e;
+
+  font-size: 14px;
+}
+
+.transcript-notice p {
+  margin: 0;
+
+  color: #78350f;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+
+/* ======================================================
+   DOWNLOAD SECTION
+   ====================================================== */
+
+.transcript-download {
+  display: flex;
+
+  justify-content: center;
+
+  padding-top: 5px;
+}
+
+
+/* ======================================================
+   DOWNLOAD BUTTON
+   ====================================================== */
+
+.download-transcript-button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  width: 100%;
+
+  padding: 13px 20px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #1d4ed8
+    );
+
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 12px rgba(37, 99, 235, 0.25);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.download-transcript-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  background:
+    linear-gradient(
+      135deg,
+      #1d4ed8,
+      #1e40af
+    );
+
+  box-shadow:
+    0 7px 18px rgba(37, 99, 235, 0.3);
+}
+
+.download-transcript-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.download-transcript-button:disabled {
+  cursor: not-allowed;
+
+  background: #9ca3af;
+
+  box-shadow: none;
+}
+
+
+/* ======================================================
+   DOWNLOAD ICON
+   ====================================================== */
+
+.download-icon {
+  font-size: 19px;
+
+  line-height: 1;
+}
+
+
+/* ======================================================
+   BUTTON SPINNER
+   ====================================================== */
+
+.button-spinner {
+  width: 15px;
+  height: 15px;
+
+  border: 2px solid rgba(255, 255, 255, 0.4);
+
+  border-top-color: #ffffff;
+
+  border-radius: 50%;
+
+  animation:
+    transcript-spin 0.7s linear infinite;
+}
+
+@keyframes transcript-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* ======================================================
+   TABLET
+   ====================================================== */
+
+@media (max-width: 900px) {
+
+  .my-transcript {
+    padding: 25px 20px;
+  }
+
+  .transcript-preview {
+    padding: 28px;
+  }
+
+}
+
+
+/* ======================================================
+   MOBILE
+   ====================================================== */
+
+@media (max-width: 650px) {
+
+  .my-transcript {
+    padding: 20px 15px;
+  }
+
+  .my-transcript-header h1 {
+    font-size: 26px;
+  }
+
+  .transcript-preview {
+    padding: 22px 18px;
+
+    border-radius: 12px;
+  }
+
+  .transcript-school-header h2 {
+    font-size: 21px;
+  }
+
+  .student-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .transcript-info-item {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 5px;
+  }
+
+  .transcript-info-value {
+    text-align: left;
+  }
+
+  .transcript-title {
+    gap: 8px;
+  }
+
+  .transcript-title h3 {
+    font-size: 15px;
+  }
+
+  .transcript-error {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .retry-button {
+    width: 100%;
+  }
+
+}
+
+
+/* ======================================================
+   SMALL MOBILE
+   ====================================================== */
+
+@media (max-width: 400px) {
+
+  .my-transcript {
+    padding: 15px 10px;
+  }
+
+  .transcript-preview {
+    padding: 18px 14px;
+  }
+
+  .student-information {
+    padding: 16px;
+  }
+
+  .transcript-notice {
+    padding: 14px;
+  }
+
+  .school-contact {
+    flex-direction: column;
+
+    gap: 5px;
+  }
+
+}

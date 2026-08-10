@@ -78,7 +78,7 @@ export const createCourse = async (
 ) => {
   try {
     const response = await API.post(
-      "/courses",
+      "/courses/",
       courseData
     );
 

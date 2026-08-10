@@ -3,9 +3,12 @@ import React, {
   useState,
 } from "react";
 
+import "./TeacherScores.css";
+
 // ======================================================
 // SERVICES
 // ======================================================
+
 import {
   getTeacherScores,
   teacherCreateScore,
@@ -26,23 +29,34 @@ import {
 // ======================================================
 // CONTEXT
 // ======================================================
+
 import { useAuth } from "../../../context/AuthContext";
 
 // ======================================================
 // COMPONENTS
 // ======================================================
+
 import Loader from "../../../components/common/Loader";
 import ErrorMessage from "../../../components/common/ErrorMessage";
+
+// ======================================================
+// ICONS
+// ======================================================
+
+import {
+  FaClipboardList,
+  FaBook,
+  FaUserGraduate,
+  FaSave,
+  FaTimes,
+  FaEdit,
+  FaTrash,
+  FaCheckCircle,
+} from "react-icons/fa";
 
 /**
  * ======================================================
  * Teacher Scores
- *
- * Backend
- * GET    /teachers/{teacher_id}/scores
- * POST   /teachers/{teacher_id}/scores
- * PATCH  /teachers/{teacher_id}/scores/{score_id}
- * DELETE /teachers/{teacher_id}/scores/{score_id}
  * ======================================================
  */
 
@@ -57,9 +71,6 @@ const TeacherScores = () => {
   const teacherId =
     user?.user_id ??
     user?.id;
-
-  console.log("USER OBJECT:", user);
-  console.log("TEACHER ID:", teacherId);
 
   // ======================================================
   // STATE
@@ -86,14 +97,14 @@ const TeacherScores = () => {
   const [submitting, setSubmitting] =
     useState(false);
 
+  const [editingId, setEditingId] =
+    useState(null);
+
   const [errorMsg, setErrorMsg] =
     useState("");
 
   const [successMsg, setSuccessMsg] =
     useState("");
-
-  const [editingId, setEditingId] =
-    useState(null);
 
   const [form, setForm] =
     useState({
@@ -132,12 +143,12 @@ const TeacherScores = () => {
 
         console.error(error);
 
+        setScores([]);
+
         setErrorMsg(
           error?.message ??
           "Failed to load scores."
         );
-
-        setScores([]);
 
       } finally {
 
@@ -194,30 +205,28 @@ const TeacherScores = () => {
     };
 
   // ======================================================
-  // INIT
+  // INITIAL LOAD
   // ======================================================
-
-  useEffect(() => {
-
-    fetchScores();
-
-  }, [teacherId]);
 
   useEffect(() => {
 
     if (!teacherId) return;
 
+    fetchScores();
     loadInitialData();
 
   }, [teacherId]);
 
   // ======================================================
-  // LOAD COURSE DATA
+  // LOAD STUDENTS & SUBJECTS
   // ======================================================
 
   useEffect(() => {
 
-    if (!selectedCourse || !teacherId) {
+    if (
+      !selectedCourse ||
+      !teacherId
+    ) {
 
       setStudents([]);
       setSubjects([]);
@@ -245,27 +254,20 @@ const TeacherScores = () => {
           ]);
 
           setStudents(
-            Array.isArray(
-              courseStudents
-            )
+            Array.isArray(courseStudents)
               ? courseStudents
               : []
           );
 
           setSubjects(
-            Array.isArray(
-              courseSubjects
-            )
+            Array.isArray(courseSubjects)
               ? courseSubjects
               : []
           );
 
         } catch (error) {
 
-          console.error(
-            "Failed loading course data:",
-            error
-          );
+          console.error(error);
 
           setStudents([]);
           setSubjects([]);
@@ -282,10 +284,12 @@ const TeacherScores = () => {
   ]);
 
   // ======================================================
-  // INPUT CHANGE
+  // HANDLE INPUT
   // ======================================================
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e
+  ) => {
 
     const {
       name,
@@ -300,7 +304,7 @@ const TeacherScores = () => {
   };
 
   // ======================================================
-  // RESET
+  // RESET FORM
   // ======================================================
 
   const resetForm =
@@ -322,6 +326,9 @@ const TeacherScores = () => {
         marks: "",
       }));
 
+      setSuccessMsg("");
+      setErrorMsg("");
+
     };
 
   // ======================================================
@@ -333,12 +340,14 @@ const TeacherScores = () => {
 
       e.preventDefault();
 
+      if (submitting) return;
+
       setSubmitting(true);
 
-      setErrorMsg("");
-      setSuccessMsg("");
-
       try {
+
+        setErrorMsg("");
+        setSuccessMsg("");
 
         const payload = {
 
@@ -357,13 +366,13 @@ const TeacherScores = () => {
         };
 
         if (
-          Object.values(payload).some((v) =>
-            Number.isNaN(v)
+          Object.values(payload).some(
+            (v) => Number.isNaN(v)
           )
         ) {
 
           throw new Error(
-            "All fields must contain valid numbers."
+            "Please complete all required fields."
           );
 
         }
@@ -425,8 +434,9 @@ const TeacherScores = () => {
 
     };
 
+
   // ======================================================
-  // EDIT
+  // EDIT SCORE
   // ======================================================
 
   const handleEdit =
@@ -440,37 +450,31 @@ const TeacherScores = () => {
         score.subject?.course_id;
 
       if (courseId) {
-
         setSelectedCourse(
           String(courseId)
         );
-
       }
 
       setForm({
 
-        student_id:
-          String(
-            score.student?.id ??
-            score.student_id
-          ),
+        student_id: String(
+          score.student?.id ??
+          score.student_id
+        ),
 
-        subject_id:
-          String(
-            score.subject?.id ??
-            score.subject_id
-          ),
+        subject_id: String(
+          score.subject?.id ??
+          score.subject_id
+        ),
 
-        term_id:
-          String(
-            score.term?.id ??
-            score.term_id
-          ),
+        term_id: String(
+          score.term?.id ??
+          score.term_id
+        ),
 
-        marks:
-          String(
-            score.marks ?? ""
-          ),
+        marks: String(
+          score.marks ?? ""
+        ),
 
       });
 
@@ -482,8 +486,9 @@ const TeacherScores = () => {
     };
 
   // ======================================================
-  // DELETE
+  // DELETE SCORE
   // ======================================================
+
   const handleDelete =
     async (scoreId) => {
 
@@ -532,6 +537,7 @@ const TeacherScores = () => {
   // ======================================================
   // LOADING
   // ======================================================
+
   if (loading) {
     return <Loader />;
   }
@@ -539,28 +545,28 @@ const TeacherScores = () => {
   // ======================================================
   // RENDER
   // ======================================================
+
   return (
-    <div>
+
+    <div className="teacher-scores-page">
 
       {/* ====================================================== */}
       {/* HEADER */}
       {/* ====================================================== */}
 
-      <div
-        style={{
-          marginBottom: "25px",
-        }}
-      >
-        <h2>Teacher Scores</h2>
+      <div className="teacher-score-header">
 
-        <p
-          style={{
-            color: "#6b7280",
-          }}
-        >
-          Create, update and manage your students'
-          scores.
-        </p>
+        <div>
+
+          <h1>Teacher Scores</h1>
+
+          <p>
+            Create, update and manage
+            your students' scores.
+          </p>
+
+        </div>
+
       </div>
 
       {/* ====================================================== */}
@@ -568,14 +574,17 @@ const TeacherScores = () => {
       {/* ====================================================== */}
 
       {successMsg && (
-        <p
-          style={{
-            color: "green",
-            marginBottom: "15px",
-          }}
-        >
-          {successMsg}
-        </p>
+
+        <div className="success-message">
+
+          <FaCheckCircle />
+
+          <span>
+            {successMsg}
+          </span>
+
+        </div>
+
       )}
 
       {/* ====================================================== */}
@@ -592,247 +601,341 @@ const TeacherScores = () => {
       {/* FORM */}
       {/* ====================================================== */}
 
-      <form
-        onSubmit={handleSubmit}
-        style={formStyle}
-      >
+      <div className="score-form-card">
 
-        <select
-          id="course_id"
-          name="course_id"
-          value={selectedCourse}
-          onChange={(e) =>
-            setSelectedCourse(
-              e.target.value
-            )
-          }
-          required
-        >
-          <option value="">
-            Select Course
-          </option>
+        <h2>
 
-          {courses.map(
-            (course) => (
-              <option
-                key={course.id}
-                value={course.id}
-              >
-                {course.name}
-              </option>
-            )
-          )}
-        </select>
-
-        <select
-          name="student_id"
-          value={form.student_id}
-          onChange={handleChange}
-          required
-          disabled={!selectedCourse}
-        >
-          <option value="">
-            Select Student
-          </option>
-
-          {students.map(
-            (student) => (
-              <option
-                key={student.id}
-                value={student.id}
-              >
-                {student.user?.full_name ||
-                  student.full_name ||
-                  `Student ${student.id}`}
-              </option>
-            )
-          )}
-        </select>
-
-        <select
-          name="subject_id"
-          value={form.subject_id}
-          onChange={handleChange}
-          required
-          disabled={!selectedCourse}
-        >
-          <option value="">
-            Select Subject
-          </option>
-
-          {subjects.map(
-            (subject) => (
-              <option
-                key={subject.id}
-                value={subject.id}
-              >
-                {subject.name}
-              </option>
-            )
-          )}
-        </select>
-
-        <input
-          type="number"
-          name="term_id"
-          value={form.term_id}
-          readOnly
-        />
-
-        <input
-          type="number"
-          name="marks"
-          placeholder="Marks"
-          value={form.marks}
-          onChange={handleChange}
-          min="0"
-          max="100"
-          required
-        />
-
-        <button
-          type="submit"
-          disabled={submitting}
-        >
-          {submitting
-            ? "Saving..."
-            : editingId
+          {editingId
             ? "Update Score"
-            : "Create Score"}
-        </button>
+            : "Add Student Score"}
 
-        {editingId && (
-          <button
-            type="button"
-            onClick={resetForm}
+        </h2>
+
+        <form
+          className="score-form"
+          onSubmit={handleSubmit}
+        >
+
+          <select
+            name="course_id"
+            value={selectedCourse}
+            onChange={(e) =>
+              setSelectedCourse(
+                e.target.value
+              )
+            }
+            required
           >
-            Cancel
-          </button>
-        )}
 
-      </form>
+            <option value="">
+              Select Course
+            </option>
 
-      {/* ====================================================== */}
-      {/* TABLE */}
-      {/* ====================================================== */}
+            {courses.map(
+              (course) => (
 
-      {scores.length === 0 ? (
-
-        <p>No scores found.</p>
-
-      ) : (
-
-        <table style={tableStyle}>
-
-          <thead>
-
-            <tr>
-              <th>ID</th>
-              <th>Student</th>
-              <th>Subject</th>
-              <th>Term</th>
-              <th>Marks</th>
-              <th>Actions</th>
-            </tr>
-
-          </thead>
-
-          <tbody>
-
-            {scores.map(
-              (score) => (
-
-                <tr
-                  key={score.id}
+                <option
+                  key={course.id}
+                  value={course.id}
                 >
-
-                  <td>
-                    {score.id}
-                  </td>
-
-                  <td>
-                    {score.student?.user?.full_name ||
-                      score.student?.full_name ||
-                      score.student_id}
-                  </td>
-
-                  <td>
-                    {score.subject?.name ||
-                      score.subject_id}
-                  </td>
-
-                  <td>
-                    {score.term?.name ||
-                      score.term_id}
-                  </td>
-
-                  <td>
-                    {score.marks}
-                  </td>
-
-                  <td>
-
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "8px",
-                        flexWrap: "wrap",
-                      }}
-                    >
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleEdit(score)
-                        }
-                      >
-                        Edit
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleDelete(
-                            score.id
-                          )
-                        }
-                      >
-                        Delete
-                      </button>
-
-                    </div>
-
-                  </td>
-
-                </tr>
+                  {course.name}
+                </option>
 
               )
             )}
 
-          </tbody>
+          </select>
 
-        </table>
+          <select
+            name="student_id"
+            value={form.student_id}
+            onChange={handleChange}
+            disabled={!selectedCourse}
+            required
+          >
 
-      )}
+            <option value="">
+              Select Student
+            </option>
+
+            {students.map(
+              (student) => (
+
+                <option
+                  key={student.id}
+                  value={student.id}
+                >
+                  {student.user?.full_name ||
+                    student.full_name ||
+                    `Student ${student.id}`}
+                </option>
+
+              )
+            )}
+
+          </select>
+
+          <select
+            name="subject_id"
+            value={form.subject_id}
+            onChange={handleChange}
+            disabled={!selectedCourse}
+            required
+          >
+
+            <option value="">
+              Select Subject
+            </option>
+
+            {subjects.map(
+              (subject) => (
+
+                <option
+                  key={subject.id}
+                  value={subject.id}
+                >
+                  {subject.name}
+                </option>
+
+              )
+            )}
+
+          </select>
+
+          <input
+            type="number"
+            name="term_id"
+            value={form.term_id}
+            readOnly
+          />
+
+          <input
+            type="number"
+            name="marks"
+            placeholder="Marks (0-100)"
+            value={form.marks}
+            onChange={handleChange}
+            min="0"
+            max="100"
+            required
+          />
+
+          <div className="form-buttons">
+
+            <button
+              type="submit"
+              className="save-btn"
+              disabled={submitting}
+            >
+
+              <FaSave />
+
+              {submitting
+                ? "Saving..."
+                : editingId
+                ? "Update Score"
+                : "Create Score"}
+
+            </button>
+
+            {editingId && (
+
+              <button
+                type="button"
+                className="cancel-btn"
+                onClick={resetForm}
+              >
+
+                <FaTimes />
+
+                Cancel
+
+              </button>
+
+            )}
+
+          </div>
+
+        </form>
+
+      </div>
+
+
+      {/* ====================================================== */}
+      {/* EMPTY STATE */}
+      {/* ====================================================== */}
+
+      {!loading &&
+        scores.length === 0 && (
+
+          <div className="empty-state">
+
+            <FaClipboardList size={55} />
+
+            <h3>
+              No Scores Found
+            </h3>
+
+            <p>
+              You haven't created any student
+              scores yet.
+            </p>
+
+          </div>
+
+        )}
+
+      {/* ====================================================== */}
+      {/* SCORES TABLE */}
+      {/* ====================================================== */}
+
+      {!loading &&
+        scores.length > 0 && (
+
+          <div className="table-wrapper">
+
+            <table className="score-table">
+
+              <thead>
+
+                <tr>
+
+                  <th>ID</th>
+
+                  <th>Student</th>
+
+                  <th>Subject</th>
+
+                  <th>Term</th>
+
+                  <th>Marks</th>
+
+                  <th>Actions</th>
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                {scores.map((score) => (
+
+                  <tr key={score.id}>
+
+                    <td>
+                      {score.id}
+                    </td>
+
+                    <td>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+
+                        <FaUserGraduate
+                          color="#2563eb"
+                        />
+
+                        {score.student?.user?.full_name ||
+                          score.student?.full_name ||
+                          score.student_id}
+
+                      </div>
+
+                    </td>
+
+                    <td>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+
+                        <FaBook
+                          color="#059669"
+                        />
+
+                        {score.subject?.name ||
+                          score.subject_id}
+
+                      </div>
+
+                    </td>
+
+                    <td>
+                      {score.term?.name ||
+                        score.term_id}
+                    </td>
+
+                    <td>
+
+                      <strong>
+                        {score.marks}
+                      </strong>
+
+                    </td>
+
+                    <td>
+
+                      <div className="action-buttons">
+
+                        <button
+                          type="button"
+                          className="edit-btn"
+                          onClick={() =>
+                            handleEdit(score)
+                          }
+                        >
+
+                          <FaEdit />
+
+                          Edit
+
+                        </button>
+
+                        <button
+                          type="button"
+                          className="delete-btn"
+                          onClick={() =>
+                            handleDelete(
+                              score.id
+                            )
+                          }
+                        >
+
+                          <FaTrash />
+
+                          Delete
+
+                        </button>
+
+                      </div>
+
+                    </td>
+
+                  </tr>
+
+                ))}
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        )}
 
     </div>
+
   );
-};
 
-// ======================================================
-// STYLES
-// ======================================================
-
-const formStyle = {
-  display: "flex",
-  gap: "10px",
-  flexWrap: "wrap",
-  marginBottom: "20px",
-};
-
-const tableStyle = {
-  width: "100%",
-  borderCollapse: "collapse",
 };
 
 export default TeacherScores;

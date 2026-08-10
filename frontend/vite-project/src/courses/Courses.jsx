@@ -1,4 +1,8 @@
+console.log("OLD COURSES PAGE LOADED");
+
 import React, { useEffect, useState } from "react";
+
+console.log("OLD COURSES PAGE LOADED");
 
 // ======================================================
 // SERVICES

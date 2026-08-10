@@ -1,0 +1,386 @@
+/* ======================================================
+   ONLINE CLASSES PAGE
+====================================================== */
+
+.online-classes-page {
+    padding: 24px;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+
+/* ======================================================
+   HEADER
+====================================================== */
+
+.online-header {
+    margin-bottom: 24px;
+}
+
+.online-header h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.online-header p {
+    color: #64748b;
+    font-size: 15px;
+    margin: 0;
+}
+
+
+/* ======================================================
+   FORM CARD
+====================================================== */
+
+.online-form-card {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 14px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 16px rgba(15, 23, 42, 0.08);
+}
+
+.online-form-card h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #1e293b;
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+
+/* ======================================================
+   FORM
+====================================================== */
+
+.online-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+}
+
+.online-form input,
+.online-form select,
+.online-form textarea {
+
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    background: #ffffff;
+    font-size: 14px;
+    transition: 0.25s;
+
+}
+
+.online-form input:focus,
+.online-form select:focus,
+.online-form textarea:focus {
+
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+
+}
+
+.online-form textarea {
+
+    resize: vertical;
+    min-height: 120px;
+
+}
+
+.online-submit-btn {
+
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 13px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: .25s;
+
+}
+
+.online-submit-btn:hover {
+
+    background: #1d4ed8;
+
+}
+
+.online-submit-btn:disabled {
+
+    cursor: not-allowed;
+    opacity: .6;
+
+}
+
+
+/* ======================================================
+   EMPTY STATE
+====================================================== */
+
+.online-empty {
+
+    background: white;
+    border-radius: 14px;
+    padding: 60px 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+
+}
+
+.online-empty svg {
+
+    font-size: 55px;
+    color: #94a3b8;
+    margin-bottom: 18px;
+
+}
+
+.online-empty h3 {
+
+    color: #1e293b;
+    margin-bottom: 10px;
+
+}
+
+.online-empty p {
+
+    color: #64748b;
+    margin: 0;
+
+}
+
+
+/* ======================================================
+   TABLE
+====================================================== */
+
+.online-table-wrapper {
+
+    background: white;
+    border-radius: 14px;
+    overflow-x: auto;
+    box-shadow: 0 5px 16px rgba(15,23,42,.08);
+
+}
+
+.online-table {
+
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1000px;
+
+}
+
+.online-table thead {
+
+    background: #1e40af;
+
+}
+
+.online-table th {
+
+    color: white;
+    text-align: left;
+    padding: 16px;
+    font-size: 14px;
+    font-weight: 600;
+
+}
+
+.online-table td {
+
+    padding: 16px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+    vertical-align: middle;
+
+}
+
+.online-table tbody tr:hover {
+
+    background: #f8fafc;
+
+}
+
+
+/* ======================================================
+   SMALL DESCRIPTION
+====================================================== */
+
+.online-table small {
+
+    color: #64748b;
+    display: block;
+    margin-top: 4px;
+
+}
+
+
+/* ======================================================
+   MEETING LINK
+====================================================== */
+
+.join-link {
+
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 8px 14px;
+
+    background: #dcfce7;
+
+    color: #15803d;
+
+    border-radius: 7px;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    transition: .25s;
+
+}
+
+.join-link:hover {
+
+    background: #bbf7d0;
+
+}
+
+
+/* ======================================================
+   ACTION BUTTONS
+====================================================== */
+
+.online-actions {
+
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+
+}
+
+.edit-btn,
+.delete-btn {
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 9px 14px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition: .25s;
+
+}
+
+.edit-btn {
+
+    background: #fef3c7;
+    color: #b45309;
+
+}
+
+.edit-btn:hover {
+
+    background: #fde68a;
+
+}
+
+.delete-btn {
+
+    background: #fee2e2;
+    color: #dc2626;
+
+}
+
+.delete-btn:hover {
+
+    background: #fecaca;
+
+}
+
+
+/* ======================================================
+   ICON SPACING
+====================================================== */
+
+.online-table td svg,
+.join-link svg,
+.edit-btn svg,
+.delete-btn svg {
+
+    vertical-align: middle;
+
+}
+
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+
+@media (max-width: 992px) {
+
+    .online-form {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+@media (max-width: 768px) {
+
+    .online-classes-page {
+
+        padding: 15px;
+
+    }
+
+    .online-header h1 {
+
+        font-size: 24px;
+
+    }
+
+    .online-form-card {
+
+        padding: 20px;
+
+    }
+
+    .online-actions {
+
+        flex-direction: column;
+
+    }
+
+    .edit-btn,
+    .delete-btn {
+
+        justify-content: center;
+        width: 100%;
+
+    }
+
+}

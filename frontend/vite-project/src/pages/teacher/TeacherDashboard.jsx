@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from "react";
+
+import "./TeacherDashboard.css";
+
 import { useAuth } from "../../context/AuthContext";
 
 // ======================================================
 // SERVICES
 // ======================================================
+
 import {
   getTeacher,
   getTeacherCourses,
@@ -15,17 +22,13 @@ import {
 // ======================================================
 // COMPONENTS
 // ======================================================
+
 import Loader from "../../components/common/Loader";
 import ErrorMessage from "../../components/common/ErrorMessage";
 
 /**
  * ======================================================
- * Teacher Dashboard (UPDATED)
- *
- * Fully aligned with:
- * - Teacher CRUD endpoints
- * - Normalized teacher service layer
- * - Backend response consistency
+ * Teacher Dashboard
  * ======================================================
  */
 
@@ -35,23 +38,39 @@ const TeacherDashboard = () => {
   // ======================================================
   // CURRENT TEACHER
   // ======================================================
-  const teacherId = Number(user?.user_id ?? user?.id);
+
+  const teacherId =
+    Number(user?.user_id ?? user?.id);
 
   // ======================================================
   // STATE
   // ======================================================
-  const [teacher, setTeacher] = useState(null);
-  const [courses, setCourses] = useState([]);
-  const [students, setStudents] = useState([]);
-  const [scores, setScores] =useState([]);
-  const [onlineClasses, setOnlineClasses] = useState([]);
 
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+  const [teacher, setTeacher] =
+    useState(null);
+
+  const [courses, setCourses] =
+    useState([]);
+
+  const [students, setStudents] =
+    useState([]);
+
+  const [scores, setScores] =
+    useState([]);
+
+  const [onlineClasses, setOnlineClasses] =
+    useState([]);
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [errorMsg, setErrorMsg] =
+    useState("");
 
   // ======================================================
   // LOAD DASHBOARD
   // ======================================================
+
   useEffect(() => {
     if (teacherId) {
       fetchDashboardData();
@@ -63,21 +82,42 @@ const TeacherDashboard = () => {
       setLoading(true);
       setErrorMsg("");
 
+      // ==================================================
+      // VALIDATE TEACHER ID
+      // ==================================================
+
       if (!teacherId) {
-        setErrorMsg("Teacher ID not found");
+        setErrorMsg(
+          "Teacher ID not found."
+        );
+
         return;
       }
 
-      // ======================================================
-      // PARALLEL FETCH
-      // ======================================================
-      const results = await Promise.allSettled([
-        getTeacher(teacherId),
-        getTeacherCourses(teacherId),
-        getTeacherStudents(teacherId),
-        getTeacherScores(teacherId),
-        getTeacherOnlineClasses(teacherId),
-      ]);
+      // ==================================================
+      // FETCH DASHBOARD DATA
+      // ==================================================
+
+      const results =
+        await Promise.allSettled([
+          getTeacher(teacherId),
+
+          getTeacherCourses(
+            teacherId
+          ),
+
+          getTeacherStudents(
+            teacherId
+          ),
+
+          getTeacherScores(
+            teacherId
+          ),
+
+          getTeacherOnlineClasses(
+            teacherId
+          ),
+        ]);
 
       const [
         teacherRes,
@@ -87,70 +127,129 @@ const TeacherDashboard = () => {
         onlineRes,
       ] = results;
 
-      // ======================================================
+      // ==================================================
       // TEACHER
-      // ======================================================
-      if (teacherRes.status === "fulfilled") {
-        setTeacher(teacherRes.value);
+      // ==================================================
+
+      if (
+        teacherRes.status ===
+        "fulfilled"
+      ) {
+        setTeacher(
+          teacherRes.value
+        );
       } else {
-        console.error("Teacher:", teacherRes.reason);
+        console.error(
+          "Teacher request failed:",
+          teacherRes.reason
+        );
+
         setTeacher(null);
       }
 
-      // ======================================================
+      // ==================================================
       // COURSES
-      // ======================================================
+      // ==================================================
+
       if (
-        courseRes.status === "fulfilled" &&
-        Array.isArray(courseRes.value)
+        courseRes.status ===
+          "fulfilled" &&
+        Array.isArray(
+          courseRes.value
+        )
       ) {
-        setCourses(courseRes.value);
+        setCourses(
+          courseRes.value
+        );
       } else {
-        console.error("Courses:", courseRes.reason);
+        console.error(
+          "Courses request failed:",
+          courseRes.reason
+        );
+
         setCourses([]);
       }
 
-      // ======================================================
+      // ==================================================
       // STUDENTS
-      // ======================================================
+      // ==================================================
+
       if (
-        studentRes.status === "fulfilled" &&
-        Array.isArray(studentRes.value)
+        studentRes.status ===
+          "fulfilled" &&
+        Array.isArray(
+          studentRes.value
+        )
       ) {
-        setStudents(studentRes.value);
+        setStudents(
+          studentRes.value
+        );
       } else {
-        console.error("Students:", studentRes.reason);
+        console.error(
+          "Students request failed:",
+          studentRes.reason
+        );
+
         setStudents([]);
       }
 
-      // ======================================================
+      // ==================================================
       // SCORES
-      // ======================================================
+      // ==================================================
+
       if (
-        scoreRes.status === "fulfilled" &&
-        Array.isArray(scoreRes.value)
+        scoreRes.status ===
+          "fulfilled" &&
+        Array.isArray(
+          scoreRes.value
+        )
       ) {
-        setScores(scoreRes.value);
+        setScores(
+          scoreRes.value
+        );
       } else {
-        console.error("Scores:", scoreRes.reason);
+        console.error(
+          "Scores request failed:",
+          scoreRes.reason
+        );
+
         setScores([]);
       }
 
-      // ======================================================
+      // ==================================================
       // ONLINE CLASSES
-      // ======================================================
+      // ==================================================
+
       if (
-        onlineRes.status === "fulfilled" &&
-        Array.isArray(onlineRes.value)
+        onlineRes.status ===
+          "fulfilled" &&
+        Array.isArray(
+          onlineRes.value
+        )
       ) {
-        setOnlineClasses(onlineRes.value);
+        setOnlineClasses(
+          onlineRes.value
+        );
       } else {
-        console.error("Online Classes:", onlineRes.reason);
+        console.error(
+          "Online classes request failed:",
+          onlineRes.reason
+        );
+
         setOnlineClasses([]);
       }
+
     } catch (error) {
-      console.error("Dashboard load error:", error);
-      setErrorMsg(error?.message || "Failed to load dashboard");
+      console.error(
+        "Dashboard load error:",
+        error
+      );
+
+      setErrorMsg(
+        error?.message ||
+          "Failed to load dashboard."
+      );
+
     } finally {
       setLoading(false);
     }
@@ -159,48 +258,57 @@ const TeacherDashboard = () => {
   // ======================================================
   // LOADING
   // ======================================================
+
   if (loading) {
     return <Loader />;
   }
 
   // ======================================================
-  // UI
+  // RENDER
   // ======================================================
-  return (
-    <div>
-      {/* HEADER */}
-      <div style={{ marginBottom: "30px" }}>
-        <h1
-          style={{
-            fontSize: "32px",
-            marginBottom: "10px",
-          }}
-        >
-          Teacher Dashboard
-        </h1>
 
-        <p style={{ color: "#6b7280" }}>
-          Welcome{" "}
-          {teacher?.full_name ||
-            user?.full_name ||
-            "Teacher"}
-        </p>
+  return (
+    <div className="teacher-dashboard">
+
+      {/* ==================================================
+          HEADER
+      ================================================== */}
+
+      <div className="teacher-dashboard-header">
+
+        <div>
+
+          <h1>
+            Teacher Dashboard
+          </h1>
+
+          <p>
+            Welcome{" "}
+            {teacher?.full_name ||
+              user?.full_name ||
+              "Teacher"}
+          </p>
+
+        </div>
+
       </div>
 
-      {/* ERROR */}
+      {/* ==================================================
+          ERROR
+      ================================================== */}
+
       {errorMsg && (
-        <ErrorMessage message={errorMsg} />
+        <ErrorMessage
+          message={errorMsg}
+        />
       )}
 
-      {/* STATS GRID */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns:
-            "repeat(auto-fit, minmax(220px,1fr))",
-          gap: "20px",
-        }}
-      >
+      {/* ==================================================
+          DASHBOARD STATS
+      ================================================== */}
+
+      <div className="teacher-dashboard-grid">
+
         <DashboardCard
           title="Courses"
           value={courses.length}
@@ -224,59 +332,202 @@ const TeacherDashboard = () => {
           value={onlineClasses.length}
           color="#7c3aed"
         />
-      </div>
 
-      {/* COURSES */}
+      </div> 
+       jsx
+      {/* ==================================================
+          COURSE OVERVIEW
+      ================================================== */}
+
       {courses.length > 0 && (
-        <div
-          style={{
-            marginTop: "40px",
-            background: "#fff",
-            padding: "20px",
-            borderRadius: "10px",
-            boxShadow:
-              "0 2px 10px rgba(0,0,0,0.05)",
-          }}
-        >
-          <h2 style={{ marginBottom: "20px" }}>
-            My Courses
-          </h2>
+        <div className="teacher-dashboard-section">
 
-          {courses.map((course) => (
-            <div
-              key={course.id}
-              style={{
-                padding: "12px 0",
-                borderBottom:
-                  "1px solid #e5e7eb",
-              }}
-            >
-              <h3>
-                {course.name ||
-                  "Untitled Course"}
-              </h3>
+          <div className="section-header">
 
-              <p
-                style={{
-                  color: "#6b7280",
-                }}
+            <h2>
+              My Courses
+            </h2>
+
+            <span>
+              {courses.length} Assigned
+            </span>
+
+          </div>
+
+          <div className="course-grid">
+
+            {courses.map((course) => (
+              <div
+                key={course.id}
+                className="course-card"
               >
-                {course.description ||
-                  "No description"}
-              </p>
 
-              <small>
-                Subjects:{" "}
-                {Array.isArray(
-                  course.subjects
-                )
-                  ? course.subjects.length
-                  : 0}
-              </small>
-            </div>
-          ))}
+                <div className="course-card-header">
+
+                  <h3>
+                    {course.name ||
+                      "Untitled Course"}
+                  </h3>
+
+                  <span className="course-id">
+                    #{course.id}
+                  </span>
+
+                </div>
+
+                <p className="course-description">
+                  {course.description ||
+                    "No description available."}
+                </p>
+
+                <div className="course-footer">
+
+                  <span>
+                    Subjects:{" "}
+                    {Array.isArray(
+                      course.subjects
+                    )
+                      ? course.subjects.length
+                      : 0}
+                  </span>
+
+                </div>
+
+              </div>
+            ))}
+
+          </div>
+
         </div>
       )}
+
+      {/* ==================================================
+          UPCOMING ONLINE CLASSES
+      ================================================== */}
+
+      {onlineClasses.length > 0 && (
+        <div className="teacher-dashboard-section">
+
+          <div className="section-header">
+
+            <h2>
+              Upcoming Online Classes
+            </h2>
+
+            <span>
+              {onlineClasses.length} Total
+            </span>
+
+          </div>
+
+          <div className="dashboard-table-wrapper">
+
+            <table className="dashboard-table">
+
+              <thead>
+
+                <tr>
+
+                  <th>
+                    Title
+                  </th>
+
+                  <th>
+                    Subject
+                  </th>
+
+                  <th>
+                    Start Time
+                  </th>
+
+                  <th>
+                    End Time
+                  </th>
+
+                  <th>
+                    Meeting
+                  </th>
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                {onlineClasses
+                  .slice(0, 5)
+                  .map((item) => (
+
+                    <tr
+                      key={item.id}
+                    >
+
+                      <td>
+                        {item.title ||
+                          "Untitled Class"}
+                      </td>
+
+                      <td>
+                        {item.subject?.name ||
+                          item.subject_name ||
+                          item.subject_id ||
+                          "N/A"}
+                      </td>
+
+                      <td>
+                        {item.start_time
+                          ? new Date(
+                              item.start_time
+                            ).toLocaleString()
+                          : "N/A"}
+                      </td>
+
+                      <td>
+                        {item.end_time
+                          ? new Date(
+                              item.end_time
+                            ).toLocaleString()
+                          : "N/A"}
+                      </td>
+
+                      <td>
+
+                        {item.meeting_link ? (
+
+                          <a
+                            href={
+                              item.meeting_link
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="meeting-link"
+                          >
+                            Join
+                          </a>
+
+                        ) : (
+
+                          <span className="muted">
+                            No Link
+                          </span>
+
+                        )}
+
+                      </td>
+
+                    </tr>
+
+                  ))}
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+      )}
+
     </div>
   );
 };
@@ -284,35 +535,39 @@ const TeacherDashboard = () => {
 // ======================================================
 // DASHBOARD CARD
 // ======================================================
+
 const DashboardCard = ({
   title,
   value,
   color,
-}) => (
-  <div
-    style={{
-      background: "#fff",
-      padding: "20px",
-      borderRadius: "10px",
-      borderLeft: `6px solid ${color}`,
-      boxShadow:
-        "0 2px 8px rgba(0,0,0,0.05)",
-    }}
-  >
-    <h3 style={{ marginBottom: "10px" }}>
-      {title}
-    </h3>
+}) => {
 
-    <p
+  return (
+    <div
+      className="dashboard-card"
       style={{
-        fontSize: "28px",
-        fontWeight: "bold",
-        color,
+        borderTop: `4px solid ${color}`,
       }}
     >
-      {value}
-    </p>
-  </div>
-);
+
+      <h3>
+        {title}
+      </h3>
+
+      <p
+        style={{
+          color,
+        }}
+      >
+        {value}
+      </p>
+
+    </div>
+  );
+};
+
+// ======================================================
+// EXPORT
+// ======================================================
 
 export default TeacherDashboard;

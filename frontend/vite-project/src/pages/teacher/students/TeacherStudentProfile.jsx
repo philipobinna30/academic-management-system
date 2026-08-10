@@ -1,124 +1,429 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  useParams,
+  useNavigate,
+} from "react-router-dom";
+
+import "./TeacherStudentProfile.css";
+
+// ======================================================
+// CONTEXT
+// ======================================================
+
 import { useAuth } from "../../../context/AuthContext";
-import { getTeacherStudentProfile } from "../../../services/teacherService";
+
+// ======================================================
+// SERVICES
+// ======================================================
+
+import {
+  getTeacherStudentProfile,
+} from "../../../services/teacherService";
+
+// ======================================================
+// COMPONENTS
+// ======================================================
 
 import Loader from "../../../components/common/Loader";
 import ErrorMessage from "../../../components/common/ErrorMessage";
 
-const TeacherStudentProfile = () => {
-  const { studentId } = useParams();
-  const navigate = useNavigate();
-  const { user } = useAuth();
+// ======================================================
+// ICONS
+// ======================================================
 
-  const [student, setStudent] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+import {
+  FaArrowLeft,
+  FaUserGraduate,
+  FaEnvelope,
+  FaBook,
+  FaChartLine,
+  FaAward,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaUserShield,
+  FaIdCard,
+} from "react-icons/fa";
+
+// ======================================================
+// COMPONENT
+// ======================================================
+
+const TeacherStudentProfile = () => {
+
+  const { studentId } =
+    useParams();
+
+  const navigate =
+    useNavigate();
+
+  const { user } =
+    useAuth();
+
+  // ======================================================
+  // STATE
+  // ======================================================
+
+  const [student, setStudent] =
+    useState(null);
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [errorMsg, setErrorMsg] =
+    useState("");
+
+  // ======================================================
+  // LOAD PROFILE
+  // ======================================================
 
   useEffect(() => {
-    if (user && studentId) {
+
+    if (
+      user &&
+      studentId
+    ) {
+
       loadStudent();
+
     }
-  }, [user, studentId]);
 
-  const loadStudent = async () => {
-    try {
-      setLoading(true);
-      setErrorMsg("");
+  }, [
+    user,
+    studentId,
+  ]);
 
-      const teacherId = user?.user_id || user?.id;
+  // ======================================================
+  // FETCH PROFILE
+  // ======================================================
 
-      if (!teacherId) {
-        throw new Error("Teacher ID not found.");
+  const loadStudent =
+    async () => {
+
+      try {
+
+        setLoading(true);
+        setErrorMsg("");
+
+        const teacherId =
+          user?.user_id ||
+          user?.id;
+
+        if (!teacherId) {
+
+          throw new Error(
+            "Teacher ID not found."
+          );
+
+        }
+
+        const data =
+          await getTeacherStudentProfile(
+            teacherId,
+            studentId
+          );
+
+        setStudent(
+          data || null
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+        setErrorMsg(
+          error?.message ||
+          "Failed to load student profile."
+        );
+
+        setStudent(null);
+
+      } finally {
+
+        setLoading(false);
+
       }
 
-      const data = await getTeacherStudentProfile(
-        teacherId,
-        studentId
-      );
+    };
 
-      setStudent(data || null);
-    } catch (error) {
-      console.error(error);
-      setErrorMsg(
-        error?.message || "Failed to load student profile"
-      );
-      setStudent(null);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // ======================================================
+  // LOADING
+  // ======================================================
 
-  if (loading) return <Loader />;
+  if (loading) {
+
+    return <Loader />;
+
+  }
+
+  // ======================================================
+  // ERROR
+  // ======================================================
 
   if (errorMsg) {
+
     return (
-      <div>
-        <ErrorMessage message={errorMsg} />
-        <button onClick={() => navigate(-1)} style={buttonStyle}>
+
+      <div className="teacher-student-page">
+
+        <ErrorMessage
+          message={errorMsg}
+        />
+
+        <button
+          className="back-btn"
+          onClick={() =>
+            navigate(-1)
+          }
+        >
+
+          <FaArrowLeft />
+
           Back
+
         </button>
+
       </div>
+
     );
+
   }
+
+  // ======================================================
+  // EMPTY
+  // ======================================================
 
   if (!student) {
-    return <p>Student profile not found.</p>;
-  }
 
-  const userInfo = student.user || {};
-  const course = student.course || {};
+    return (
 
-  return (
-    <div>
-      <div style={{ marginBottom: 25 }}>
-        <h2>Student Profile</h2>
-        <p style={{ color: "#6b7280" }}>Student academic profile</p>
+      <div className="teacher-student-page">
+
+        <div className="empty-card">
+
+          <FaUserGraduate
+            className="empty-icon"
+          />
+
+          <h2>
+            Student Not Found
+          </h2>
+
+          <p>
+            The requested student
+            profile could not be found.
+          </p>
+
+          <button
+            className="back-btn"
+            onClick={() =>
+              navigate(-1)
+            }
+          >
+
+            <FaArrowLeft />
+
+            Back
+
+          </button>
+
+        </div>
+
       </div>
 
-      <div style={cardStyle}>
-        <ProfileRow label="Profile ID" value={student.id || "N/A"} />
-        <ProfileRow label="User ID" value={student.user_id || "N/A"} />
+    );
+
+  }
+
+  // ======================================================
+  // OBJECTS
+  // ======================================================
+
+  const userInfo =
+    student.user || {};
+
+  const course =
+    student.course || {};
+
+  // ======================================================
+  // HELPER
+  // ======================================================
+
+  const yesNoBadge = (
+    value
+  ) => (
+
+    <span
+      className={
+        value
+          ? "status-badge active"
+          : "status-badge inactive"
+      }
+    >
+      {value ? (
+        <>
+          <FaCheckCircle />
+          Yes
+        </>
+      ) : (
+        <>
+          <FaTimesCircle />
+          No
+        </>
+      )}
+    </span>
+
+  );
+
+  // ======================================================
+  // RENDER
+  // ======================================================
+
+  return (
+
+    <div className="teacher-student-page">
+
+      {/* ====================================================== */}
+      {/* HEADER */}
+      {/* ====================================================== */}
+
+      <div className="teacher-student-header">
+
+        <div>
+
+          <h1>Student Profile</h1>
+
+          <p>
+            View complete academic and account
+            information for this student.
+          </p>
+
+        </div>
+
+      </div>
+
+      {/* ====================================================== */}
+      {/* PROFILE CARD */}
+      {/* ====================================================== */}
+
+      <div className="profile-card">
+
+        <div className="profile-avatar">
+
+          <FaUserGraduate />
+
+        </div>
+
+        <div className="profile-details">
+
+          <h2>
+            {student.full_name ||
+              userInfo.full_name ||
+              "N/A"}
+          </h2>
+
+          <p>
+
+            <FaEnvelope />
+
+            {student.email ||
+              userInfo.email ||
+              "N/A"}
+
+          </p>
+
+          <p>
+
+            <FaBook />
+
+            {student.course_name ||
+              course.name ||
+              "No Course"}
+
+          </p>
+
+        </div>
+
+      </div>
+
+      {/* ====================================================== */}
+      {/* INFORMATION GRID */}
+      {/* ====================================================== */}
+
+      <div className="profile-grid">
 
         <ProfileRow
-          label="Full Name"
-          value={student.full_name || userInfo.full_name || "N/A"}
+          icon={<FaIdCard />}
+          label="Profile ID"
+          value={student.id || "N/A"}
         />
 
         <ProfileRow
-          label="Email"
-          value={student.email || userInfo.email || "N/A"}
+          icon={<FaIdCard />}
+          label="User ID"
+          value={student.user_id || "N/A"}
         />
 
         <ProfileRow
+          icon={<FaUserGraduate />}
           label="Role"
-          value={userInfo.role || student.role || "student"}
+          value={
+            userInfo.role ||
+            student.role ||
+            "Student"
+          }
         />
 
         <ProfileRow
+          icon={<FaBook />}
           label="Course"
-          value={student.course_name || course.name || "N/A"}
+          value={
+            student.course_name ||
+            course.name ||
+            "N/A"
+          }
         />
 
         <ProfileRow
+          icon={<FaBook />}
           label="Course ID"
-          value={course.id || student.course_id || "N/A"}
+          value={
+            course.id ||
+            student.course_id ||
+            "N/A"
+          }
         />
 
-        <ProfileRow label="Parent ID" value={student.parent_id || "N/A"} />
+        <ProfileRow
+          icon={<FaUserShield />}
+          label="Parent ID"
+          value={
+            student.parent_id ||
+            "N/A"
+          }
+        />
 
         <ProfileRow
+          icon={<FaChartLine />}
           label="Total Score"
-          value={student.total_score ?? 0}
+          value={
+            student.total_score ?? 0
+          }
         />
 
         <ProfileRow
+          icon={<FaChartLine />}
           label="Average Score"
-          value={student.average_score ?? 0}
+          value={
+            student.average_score ?? 0
+          }
         />
 
-        {/* FIXED FALLBACKS */}
         <ProfileRow
+          icon={<FaAward />}
           label="Position"
           value={
             student.position ||
@@ -129,11 +434,15 @@ const TeacherStudentProfile = () => {
         />
 
         <ProfileRow
+          icon={<FaAward />}
           label="GPA"
-          value={student.gpa ?? 0}
+          value={
+            student.gpa ?? 0
+          }
         />
 
         <ProfileRow
+          icon={<FaChartLine />}
           label="Remarks"
           value={
             student.remarks ||
@@ -144,63 +453,95 @@ const TeacherStudentProfile = () => {
         />
 
         <ProfileRow
-          label="Active"
-          value={userInfo.is_active === false ? "No" : "Yes"}
-        />
-
-        <ProfileRow
+          icon={<FaCheckCircle />}
           label="Verified"
-          value={userInfo.is_verified ? "Yes" : "No"}
+          value={yesNoBadge(
+            userInfo.is_verified
+          )}
         />
 
         <ProfileRow
+          icon={<FaCheckCircle />}
+          label="Active"
+          value={yesNoBadge(
+            userInfo.is_active !== false
+          )}
+        />
+
+        <ProfileRow
+          icon={<FaUserShield />}
           label="Permissions"
           value={
-            Array.isArray(userInfo.permissions) &&
+            Array.isArray(
+              userInfo.permissions
+            ) &&
             userInfo.permissions.length
-              ? userInfo.permissions.join(", ")
+              ? userInfo.permissions.join(
+                  ", "
+                )
               : "None"
           }
         />
+
       </div>
 
-      <div style={{ marginTop: 20 }}>
-        <button onClick={() => navigate(-1)} style={buttonStyle}>
+      {/* ====================================================== */}
+      {/* BACK BUTTON */}
+      {/* ====================================================== */}
+
+      <div className="profile-actions">
+
+        <button
+          className="back-btn"
+          onClick={() =>
+            navigate(-1)
+          }
+        >
+
+          <FaArrowLeft />
+
           Back
+
         </button>
+
       </div>
+
     </div>
+
   );
+
 };
 
-const ProfileRow = ({ label, value }) => (
-  <div
-    style={{
-      marginBottom: 16,
-      paddingBottom: 12,
-      borderBottom: "1px solid #e5e7eb",
-    }}
-  >
-    <strong>{label}</strong>
-    <div style={{ marginTop: 4 }}>{value}</div>
+// ======================================================
+// PROFILE ROW
+// ======================================================
+
+const ProfileRow = ({
+  icon,
+  label,
+  value,
+}) => (
+
+  <div className="profile-row">
+
+    <div className="profile-label">
+
+      {icon}
+
+      <span>
+        {label}
+      </span>
+
+    </div>
+
+    <div className="profile-value">
+
+      {value}
+
+    </div>
+
   </div>
+
 );
-
-const cardStyle = {
-  background: "#fff",
-  padding: "24px",
-  borderRadius: "8px",
-  boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-  maxWidth: "700px",
-};
-
-const buttonStyle = {
-  padding: "10px 16px",
-  border: "none",
-  borderRadius: "6px",
-  background: "#2563eb",
-  color: "#fff",
-  cursor: "pointer",
-};
 
 export default TeacherStudentProfile;

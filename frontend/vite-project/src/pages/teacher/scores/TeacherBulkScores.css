@@ -1,0 +1,1019 @@
+
+/* ======================================================
+   TEACHER BULK SCORES
+   Modern Blue Dashboard / Panel Design
+   ====================================================== */
+
+
+/* ======================================================
+   PAGE CONTAINER
+   ====================================================== */
+
+.teacher-bulk-scores {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px;
+  box-sizing: border-box;
+  color: #1e293b;
+}
+
+
+/* ======================================================
+   PAGE HEADER
+   ====================================================== */
+
+.bulk-header {
+  background: linear-gradient(
+    135deg,
+    #2563eb 0%,
+    #1d4ed8 100%
+  );
+
+  color: #ffffff;
+
+  border-radius: 16px;
+
+  padding: 28px 32px;
+
+  margin-bottom: 24px;
+
+  box-shadow:
+    0 8px 20px rgba(37, 99, 235, 0.18);
+}
+
+.bulk-header h1 {
+  margin: 0 0 8px;
+
+  font-size: 28px;
+
+  font-weight: 700;
+
+  letter-spacing: -0.3px;
+}
+
+.bulk-header p {
+  margin: 0;
+
+  max-width: 700px;
+
+  color: rgba(255, 255, 255, 0.9);
+
+  font-size: 15px;
+
+  line-height: 1.6;
+}
+
+
+/* ======================================================
+   ACTIVE TERM
+   ====================================================== */
+
+.active-term {
+  display: inline-flex;
+
+  align-items: center;
+
+  margin-top: 16px;
+
+  padding: 7px 14px;
+
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.16);
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  color: #ffffff;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+
+/* ======================================================
+   SUCCESS MESSAGE
+   ====================================================== */
+
+.success-message {
+  margin-bottom: 20px;
+
+  padding: 14px 18px;
+
+  border-radius: 10px;
+
+  background: #ecfdf5;
+
+  border: 1px solid #a7f3d0;
+
+  color: #047857;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+
+/* ======================================================
+   ERROR AREA
+   ====================================================== */
+
+.teacher-bulk-scores > .error-message {
+  margin-bottom: 20px;
+}
+
+
+/* ======================================================
+   MAIN FORM
+   ====================================================== */
+
+.bulk-form {
+  width: 100%;
+}
+
+
+/* ======================================================
+   SCORE INFORMATION CARD
+   ====================================================== */
+
+.bulk-form-card {
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 16px;
+
+  padding: 26px;
+
+  margin-bottom: 24px;
+
+  box-shadow:
+    0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+.form-card-header {
+  margin-bottom: 24px;
+
+  padding-bottom: 18px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.form-card-header h2 {
+  margin: 0 0 7px;
+
+  color: #1d4ed8;
+
+  font-size: 20px;
+
+  font-weight: 700;
+}
+
+.form-card-header p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+
+/* ======================================================
+   COURSE / SUBJECT GRID
+   ====================================================== */
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 22px;
+}
+
+
+/* ======================================================
+   FORM GROUP
+   ====================================================== */
+
+.form-group {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+.form-group label {
+  color: #334155;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+
+/* ======================================================
+   SELECT INPUTS
+   ====================================================== */
+
+.form-group select {
+  width: 100%;
+
+  height: 46px;
+
+  padding: 0 14px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #1e293b;
+
+  font-size: 14px;
+
+  outline: none;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+
+  box-sizing: border-box;
+}
+
+.form-group select:hover {
+  border-color: #93c5fd;
+}
+
+.form-group select:focus {
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.form-group select:disabled {
+  background: #f1f5f9;
+
+  color: #94a3b8;
+
+  cursor: not-allowed;
+
+  border-color: #e2e8f0;
+}
+
+
+/* ======================================================
+   LOADER AREA
+   ====================================================== */
+
+.teacher-bulk-scores .loader {
+  margin: 25px auto;
+}
+
+
+/* ======================================================
+   EMPTY STATE
+   ====================================================== */
+
+.empty-state {
+  background: #ffffff;
+
+  border: 1px dashed #93c5fd;
+
+  border-radius: 16px;
+
+  padding: 45px 25px;
+
+  text-align: center;
+
+  margin-bottom: 24px;
+}
+
+.empty-state h3 {
+  margin: 0 0 8px;
+
+  color: #1d4ed8;
+
+  font-size: 19px;
+}
+
+.empty-state p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+
+/* ======================================================
+   STUDENT TABLE CARD
+   ====================================================== */
+
+.table-card {
+  width: 100%;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+
+/* ======================================================
+   TABLE HEADER
+   ====================================================== */
+
+.table-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 24px 26px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background: #ffffff;
+}
+
+.table-header h2 {
+  margin: 0 0 6px;
+
+  color: #1d4ed8;
+
+  font-size: 20px;
+
+  font-weight: 700;
+}
+
+.table-header p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+
+/* ======================================================
+   SELECTED COUNTER
+   ====================================================== */
+
+.selected-counter {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 8px 14px;
+
+  border-radius: 20px;
+
+  background: #eff6ff;
+
+  border: 1px solid #bfdbfe;
+
+  color: #1d4ed8;
+
+  white-space: nowrap;
+}
+
+.selected-counter strong {
+  font-size: 15px;
+
+  font-weight: 700;
+}
+
+.selected-counter span {
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+
+/* ======================================================
+   TABLE WRAPPER
+   ====================================================== */
+
+.table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+
+/* ======================================================
+   BULK TABLE
+   ====================================================== */
+
+.bulk-table {
+  width: 100%;
+
+  min-width: 760px;
+
+  border-collapse: collapse;
+
+  table-layout: auto;
+}
+
+
+/* ======================================================
+   TABLE HEADER
+   ====================================================== */
+
+.bulk-table thead {
+  background: #2563eb;
+
+  color: #ffffff;
+}
+
+.bulk-table thead th {
+  padding: 15px 16px;
+
+  text-align: left;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  border: none;
+}
+
+.bulk-table thead th:first-child {
+  padding-left: 22px;
+}
+
+
+/* ======================================================
+   SELECT COLUMN
+   ====================================================== */
+
+.bulk-table .select-column {
+  width: 55px;
+
+  text-align: center;
+}
+
+
+/* ======================================================
+   TABLE BODY
+   ====================================================== */
+
+.bulk-table tbody tr {
+  background: #ffffff;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.bulk-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.bulk-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+
+/* ======================================================
+   SELECTED STUDENT ROW
+   ====================================================== */
+
+.bulk-table tbody tr.selected-row {
+  background: #eff6ff;
+}
+
+.bulk-table tbody tr.selected-row:hover {
+  background: #dbeafe;
+}
+
+
+/* ======================================================
+   TABLE CELLS
+   ====================================================== */
+
+.bulk-table tbody td {
+  padding: 14px 16px;
+
+  color: #334155;
+
+  font-size: 14px;
+
+  vertical-align: middle;
+}
+
+
+/* ======================================================
+   STUDENT NAME
+   ====================================================== */
+
+.bulk-table td.student-name {
+  color: #0f172a;
+
+  font-weight: 600;
+}
+
+
+/* ======================================================
+   CHECKBOX
+   ====================================================== */
+
+.bulk-table input[type="checkbox"] {
+  width: 17px;
+
+  height: 17px;
+
+  margin: 0;
+
+  accent-color: #2563eb;
+
+  cursor: pointer;
+
+  vertical-align: middle;
+}
+
+
+/* ======================================================
+   SCORE INPUT
+   ====================================================== */
+
+.score-input {
+  width: 130px;
+
+  height: 40px;
+
+  padding: 0 12px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #0f172a;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.score-input::placeholder {
+  color: #94a3b8;
+
+  font-weight: 400;
+}
+
+.score-input:hover:not(:disabled) {
+  border-color: #93c5fd;
+}
+
+.score-input:focus:not(:disabled) {
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.score-input:disabled {
+  background: #f1f5f9;
+
+  color: #94a3b8;
+
+  cursor: not-allowed;
+}
+
+
+/* ======================================================
+   REMOVE SPINNER VISUAL CLUTTER
+   ====================================================== */
+
+.score-input::-webkit-inner-spin-button,
+.score-input::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+
+/* ======================================================
+   SUBMIT SECTION
+   ====================================================== */
+
+.submit-section {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 20px 26px;
+
+  border-top: 1px solid #e5e7eb;
+
+  background: #f8fafc;
+}
+
+
+/* ======================================================
+   SUBMIT INFORMATION
+   ====================================================== */
+
+.submit-info {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+.submit-info strong {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 28px;
+
+  height: 28px;
+
+  padding: 0 7px;
+
+  border-radius: 7px;
+
+  background: #dbeafe;
+
+  color: #1d4ed8;
+
+  font-size: 13px;
+}
+
+
+/* ======================================================
+   SUBMIT BUTTON
+   ====================================================== */
+
+.submit-btn {
+  min-width: 170px;
+
+  height: 44px;
+
+  padding: 0 22px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #2563eb;
+
+  color: #ffffff;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+
+  box-shadow:
+    0 5px 12px rgba(37, 99, 235, 0.25);
+
+  transform: translateY(-1px);
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submit-btn:disabled {
+  background: #94a3b8;
+
+  color: #e2e8f0;
+
+  cursor: not-allowed;
+
+  box-shadow: none;
+}
+
+
+/* ======================================================
+   GENERAL BUTTON STYLES
+   FOR EDIT / DELETE IF PRESENT
+   ====================================================== */
+
+.edit-btn,
+.delete-btn {
+  border: none;
+
+  border-radius: 7px;
+
+  padding: 7px 12px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.edit-btn {
+  background: #dbeafe;
+
+  color: #1d4ed8;
+}
+
+.edit-btn:hover {
+  background: #bfdbfe;
+
+  transform: translateY(-1px);
+}
+
+.delete-btn {
+  background: #fee2e2;
+
+  color: #dc2626;
+}
+
+.delete-btn:hover {
+  background: #fecaca;
+
+  transform: translateY(-1px);
+}
+
+
+/* ======================================================
+   ACTION BUTTON GROUP
+   IF YOUR JSX USES IT
+   ====================================================== */
+
+.action-buttons {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  white-space: nowrap;
+}
+
+
+/* ======================================================
+   UPDATE / EDIT FORM
+   IF PRESENT IN TEACHER SCORE MANAGEMENT
+   ====================================================== */
+
+.update-score-card {
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 16px;
+
+  padding: 26px;
+
+  margin-bottom: 24px;
+
+  box-shadow:
+    0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+.update-score-card h2 {
+  margin: 0 0 20px;
+
+  color: #1d4ed8;
+
+  font-size: 20px;
+
+  font-weight: 700;
+}
+
+.update-score-form {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 18px;
+
+  align-items: end;
+}
+
+
+/* ======================================================
+   CANCEL BUTTON
+   ====================================================== */
+
+.cancel-btn {
+  height: 44px;
+
+  padding: 0 20px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #475569;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background: #f8fafc;
+
+  border-color: #94a3b8;
+}
+
+
+/* ======================================================
+   RESPONSIVE TABLET
+   ====================================================== */
+
+@media (max-width: 900px) {
+
+  .teacher-bulk-scores {
+    padding: 22px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .update-score-form {
+    grid-template-columns: 1fr;
+  }
+
+  .table-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .selected-counter {
+    align-self: flex-start;
+  }
+
+}
+
+
+/* ======================================================
+   RESPONSIVE MOBILE
+   ====================================================== */
+
+@media (max-width: 640px) {
+
+  .teacher-bulk-scores {
+    padding: 14px;
+  }
+
+  .bulk-header {
+    padding: 22px;
+
+    border-radius: 12px;
+  }
+
+  .bulk-header h1 {
+    font-size: 23px;
+  }
+
+  .bulk-header p {
+    font-size: 13px;
+  }
+
+  .bulk-form-card {
+    padding: 18px;
+
+    border-radius: 12px;
+  }
+
+  .form-card-header h2 {
+    font-size: 18px;
+  }
+
+  .table-card {
+    border-radius: 12px;
+  }
+
+  .table-header {
+    padding: 20px;
+  }
+
+  .table-header h2 {
+    font-size: 18px;
+  }
+
+  .submit-section {
+    align-items: stretch;
+
+    flex-direction: column;
+
+    padding: 18px 20px;
+  }
+
+  .submit-info {
+    justify-content: center;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
+
+  .score-input {
+    width: 110px;
+  }
+
+}
+
+
+/* ======================================================
+   VERY SMALL SCREENS
+   ====================================================== */
+
+@media (max-width: 420px) {
+
+  .teacher-bulk-scores {
+    padding: 10px;
+  }
+
+  .bulk-header {
+    padding: 18px;
+  }
+
+  .bulk-header h1 {
+    font-size: 21px;
+  }
+
+  .bulk-form-card {
+    padding: 15px;
+  }
+
+  .form-group select {
+    height: 44px;
+  }
+
+  .table-header {
+    padding: 17px;
+  }
+
+}

@@ -1,9 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useAuth } from "../../../context/AuthContext";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+import "./TeacherSubjects.css";
+
+import {
+  useAuth,
+} from "../../../context/AuthContext";
 
 // ======================================================
 // SERVICES
 // ======================================================
+
 import {
   getTeacherCourses,
 } from "../../../services/teacherService";
@@ -15,6 +25,7 @@ import {
 // ======================================================
 // COMPONENTS
 // ======================================================
+
 import Loader from "../../../components/common/Loader";
 import ErrorMessage from "../../../components/common/ErrorMessage";
 
@@ -30,11 +41,13 @@ import ErrorMessage from "../../../components/common/ErrorMessage";
  */
 
 const TeacherSubjects = () => {
+
   const { user } = useAuth();
 
   // ======================================================
   // CURRENT TEACHER
   // ======================================================
+
   const teacherId =
     user?.user_id ||
     user?.id;
@@ -42,6 +55,7 @@ const TeacherSubjects = () => {
   // ======================================================
   // STATE
   // ======================================================
+
   const [subjects, setSubjects] =
     useState([]);
 
@@ -51,246 +65,340 @@ const TeacherSubjects = () => {
   const [errorMsg, setErrorMsg] =
     useState("");
 
+  const [search, setSearch] =
+    useState("");
+
   // ======================================================
   // LOAD SUBJECTS
   // ======================================================
-  useEffect(() => {
-    if (teacherId) {
-      loadSubjects();
-    }
-  }, [teacherId]);
 
-  const loadSubjects = async () => {
-    try {
-      setLoading(true);
-      setErrorMsg("");
+  const loadSubjects =
+    async () => {
 
-      // ==================================================
-      // LOAD TEACHER COURSES
-      // ==================================================
-      const teacherCourses =
-        await getTeacherCourses(
-          teacherId
+      if (!teacherId) return;
+
+      try {
+
+        setLoading(true);
+        setErrorMsg("");
+
+        // ================================================
+        // TEACHER COURSES
+        // ================================================
+
+        const teacherCourses =
+          await getTeacherCourses(
+            teacherId
+          );
+
+        const courseIds =
+          Array.isArray(
+            teacherCourses
+          )
+            ? teacherCourses
+                .map(
+                  (course) =>
+                    course.id
+                )
+                .filter(Boolean)
+            : [];
+
+        // ================================================
+        // ALL SUBJECTS
+        // ================================================
+
+        const allSubjects =
+          await getSubjects();
+
+        const filteredSubjects =
+          Array.isArray(
+            allSubjects
+          )
+            ? allSubjects.filter(
+                (subject) =>
+                  courseIds.includes(
+                    subject.course_id
+                  )
+              )
+            : [];
+
+        setSubjects(
+          filteredSubjects
         );
 
-      const courseIds =
-        Array.isArray(
-          teacherCourses
-        )
-          ? teacherCourses
-              .map(
-                (course) =>
-                  course.id
-              )
-              .filter(Boolean)
-          : [];
+      } catch (error) {
 
-      // ==================================================
-      // LOAD ALL SUBJECTS
-      // ==================================================
-      const allSubjects =
-        await getSubjects();
+        console.error(error);
 
-      const filteredSubjects =
-        Array.isArray(
-          allSubjects
-        )
-          ? allSubjects.filter(
-              (subject) =>
-                courseIds.includes(
-                  subject.course_id
-                )
-            )
-          : [];
+        setErrorMsg(
+          error?.message ||
+            "Failed to load teacher subjects."
+        );
 
-      setSubjects(
-        filteredSubjects
+        setSubjects([]);
+
+      } finally {
+
+        setLoading(false);
+
+      }
+
+    };
+
+  // ======================================================
+  // INITIAL LOAD
+  // ======================================================
+
+  useEffect(() => {
+
+    loadSubjects();
+
+  }, [teacherId]);
+
+  // ======================================================
+  // FILTER SUBJECTS
+  // ======================================================
+
+  const filteredSubjects =
+    useMemo(() => {
+
+      const keyword =
+        search.toLowerCase();
+
+      return subjects.filter(
+        (subject) =>
+
+          String(subject.id)
+            .includes(keyword)
+
+          ||
+
+          (subject.name || "")
+            .toLowerCase()
+            .includes(keyword)
+
+          ||
+
+          String(
+            subject.course_id
+          ).includes(keyword)
+
       );
-    } catch (error) {
-      console.error(
-        "Failed to load teacher subjects:",
-        error
-      );
 
-      setErrorMsg(
-        error?.message ||
-          "Failed to load subjects."
-      );
+    }, [subjects, search]);
 
-      setSubjects([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // ======================================================
+  // SUMMARY
+  // ======================================================
+
+  const totalSubjects =
+    subjects.length;
+
+  const totalCourses =
+    new Set(
+      subjects.map(
+        (subject) =>
+          subject.course_id
+      )
+    ).size;
 
   // ======================================================
   // LOADING
   // ======================================================
+
   if (loading) {
+
     return <Loader />;
+
   }
+
 
   // ======================================================
   // RENDER
   // ======================================================
-  return (
-    <div>
-      {/* HEADER */}
-      <div
-        style={{
-          marginBottom: "30px",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "30px",
-            marginBottom: "10px",
-          }}
-        >
-          My Subjects
-        </h1>
 
-        <p
-          style={{
-            color: "#6b7280",
-          }}
-        >
-          Subjects assigned to your
-          courses.
-        </p>
+  return (
+
+    <div className="teacher-subjects-page">
+
+      {/* ====================================================== */}
+      {/* HEADER */}
+      {/* ====================================================== */}
+
+      <div className="teacher-subjects-header">
+
+        <div>
+
+          <h1>
+            My Subjects
+          </h1>
+
+          <p>
+            View all subjects assigned to your courses.
+          </p>
+
+        </div>
+
       </div>
 
+      {/* ====================================================== */}
+      {/* SUMMARY */}
+      {/* ====================================================== */}
+
+      <div className="subject-summary">
+
+        <div className="summary-card">
+
+          <h3>
+            Total Subjects
+          </h3>
+
+          <span>
+            {totalSubjects}
+          </span>
+
+        </div>
+
+        <div className="summary-card">
+
+          <h3>
+            Assigned Courses
+          </h3>
+
+          <span>
+            {totalCourses}
+          </span>
+
+        </div>
+
+      </div>
+
+      {/* ====================================================== */}
+      {/* SEARCH */}
+      {/* ====================================================== */}
+
+      <div className="subject-toolbar">
+
+        <input
+          type="text"
+          placeholder="Search subject..."
+          value={search}
+          onChange={(e) =>
+            setSearch(
+              e.target.value
+            )
+          }
+        />
+
+      </div>
+
+      {/* ====================================================== */}
       {/* ERROR */}
+      {/* ====================================================== */}
+
       {errorMsg && (
+
         <ErrorMessage
           message={errorMsg}
         />
+
       )}
 
+      {/* ====================================================== */}
       {/* EMPTY */}
+      {/* ====================================================== */}
+
       {!loading &&
         !errorMsg &&
-        subjects.length === 0 && (
-          <div
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "10px",
-            }}
-          >
+        filteredSubjects.length === 0 && (
+
+          <div className="empty-state">
+
+            <h3>
+              No Subjects Found
+            </h3>
+
             <p>
-              No subjects assigned
-              yet.
+              No subjects have been assigned
+              to your courses.
             </p>
+
           </div>
+
         )}
 
+      {/* ====================================================== */}
       {/* TABLE */}
-      {subjects.length > 0 && (
-        <div
-          style={{
-            background: "#fff",
-            borderRadius: "10px",
-            overflowX: "auto",
-            boxShadow:
-              "0 2px 10px rgba(0,0,0,0.05)",
-          }}
-        >
-          <table
-            style={{
-              width: "100%",
-              borderCollapse:
-                "collapse",
-            }}
-          >
-            <thead
-              style={{
-                background:
-                  "#f3f4f6",
-              }}
-            >
-              <tr>
-                <TableHead title="S/N" />
-                <TableHead title="Subject ID" />
-                <TableHead title="Subject Name" />
-                <TableHead title="Course ID" />
-              </tr>
-            </thead>
+      {/* ====================================================== */}
 
-            <tbody>
-              {subjects.map(
-                (
-                  subject,
-                  index
-                ) => (
-                  <tr
-                    key={subject.id}
-                    style={{
-                      borderBottom:
-                        "1px solid #e5e7eb",
-                    }}
-                  >
-                    <TableCell
-                      value={index + 1}
-                    />
+      {!loading &&
+        filteredSubjects.length > 0 && (
 
-                    <TableCell
-                      value={subject.id}
-                    />
+          <div className="table-wrapper">
 
-                    <TableCell
-                      value={
-                        subject.name
-                      }
-                    />
+            <table className="subjects-table">
 
-                    <TableCell
-                      value={
-                        subject.course_id
-                      }
-                    />
-                  </tr>
-                )
-              )}
-            </tbody>
-          </table>
-        </div>
-      )}
+              <thead>
+
+                <tr>
+
+                  <th>S/N</th>
+
+                  <th>Subject ID</th>
+
+                  <th>Subject Name</th>
+
+                  <th>Course ID</th>
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                {filteredSubjects.map(
+                  (
+                    subject,
+                    index
+                  ) => (
+
+                    <tr
+                      key={subject.id}
+                    >
+
+                      <td>
+                        {index + 1}
+                      </td>
+
+                      <td>
+                        {subject.id}
+                      </td>
+
+                      <td>
+                        {subject.name}
+                      </td>
+
+                      <td>
+                        {subject.course_id}
+                      </td>
+
+                    </tr>
+
+                  )
+                )}
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        )}
+
     </div>
+
   );
+
 };
-
-// ======================================================
-// TABLE HEAD
-// ======================================================
-const TableHead = ({
-  title,
-}) => (
-  <th
-    style={{
-      textAlign: "left",
-      padding: "14px",
-      color: "#374151",
-    }}
-  >
-    {title}
-  </th>
-);
-
-// ======================================================
-// TABLE CELL
-// ======================================================
-const TableCell = ({
-  value,
-}) => (
-  <td
-    style={{
-      padding: "14px",
-      color: "#111827",
-    }}
-  >
-    {value}
-  </td>
-);
 
 export default TeacherSubjects;

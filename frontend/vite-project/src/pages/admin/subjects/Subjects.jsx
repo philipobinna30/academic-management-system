@@ -4,6 +4,12 @@ import React, {
   useMemo,
 } from "react";
 
+import "./Subjects.css";
+
+// ======================================================
+// SERVICES
+// ======================================================
+
 import {
   getSubjects,
   createSubject,
@@ -11,12 +17,38 @@ import {
   deleteSubject,
 } from "../../../services/subjectService";
 
-import { getCourses } from "../../../services/courseService";
+import {
+  getCourses,
+} from "../../../services/courseService";
+
+// ======================================================
+// COMPONENTS
+// ======================================================
 
 import Loader from "../../../components/common/Loader";
 import ErrorMessage from "../../../components/common/ErrorMessage";
 
+// ======================================================
+// ICONS
+// ======================================================
+
+import {
+  FaBook,
+  FaSearch,
+  FaLayerGroup,
+  FaGraduationCap,
+  FaPlus,
+  FaEdit,
+  FaTrash,
+  FaTimes,
+} from "react-icons/fa";
+
 const Subjects = () => {
+
+  // ======================================================
+  // STATE
+  // ======================================================
+
   const [subjects, setSubjects] =
     useState([]);
 
@@ -32,173 +64,319 @@ const Subjects = () => {
   const [errorMsg, setErrorMsg] =
     useState("");
 
-  const [form, setForm] =
-    useState({
-      name: "",
-      course_id: "",
-    });
-
   const [editingId, setEditingId] =
     useState(null);
+
+  const [search, setSearch] =
+    useState("");
+
+  const [form, setForm] =
+    useState({
+
+      name: "",
+
+      course_id: "",
+
+    });
+
+  // ======================================================
+  // DASHBOARD STATISTICS
+  // ======================================================
+
+  const totalSubjects =
+    subjects.length;
+
+  const totalCourses =
+    courses.length;
+
+  const assignedSubjects =
+    subjects.filter(
+      (subject) => subject.course_id
+    ).length;
+
+  // ======================================================
+  // SEARCH FILTER
+  // ======================================================
+
+  const filteredSubjects =
+    useMemo(() => {
+
+      if (!search.trim()) {
+
+        return subjects;
+
+      }
+
+      const keyword =
+        search.toLowerCase();
+
+      return subjects.filter(
+        (subject) =>
+
+          subject.name
+            ?.toLowerCase()
+            .includes(keyword) ||
+
+          getCourseName(
+            subject.course_id
+          )
+            .toLowerCase()
+            .includes(keyword)
+
+      );
+
+    }, [subjects, search]);
 
   // ======================================================
   // FETCH DATA
   // ======================================================
 
   const fetchData = async () => {
+
     try {
+
       setLoading(true);
+
       setErrorMsg("");
 
       const [
+
         subjectsData,
+
         coursesData,
+
       ] = await Promise.all([
+
         getSubjects(),
+
         getCourses(),
+
       ]);
 
       setSubjects(
+
         Array.isArray(subjectsData)
+
           ? subjectsData
+
           : []
+
       );
 
       setCourses(
+
         Array.isArray(coursesData)
+
           ? coursesData
+
           : []
+
       );
+
     } catch (error) {
+
       console.error(error);
 
       setErrorMsg(
+
         error?.message ||
+
           "Failed to load subjects"
+
       );
+
     } finally {
+
       setLoading(false);
+
     }
+
   };
 
   useEffect(() => {
+
     fetchData();
+
   }, []);
 
   // ======================================================
   // COURSE LOOKUP
   // ======================================================
 
-  const courseMap = useMemo(
-    () =>
-      Object.fromEntries(
-        courses.map((course) => [
-          course.id,
-          course.name,
-        ])
-      ),
-    [courses]
-  );
+  const courseMap =
+    useMemo(
+
+      () =>
+
+        Object.fromEntries(
+
+          courses.map(
+
+            (course) => [
+
+              course.id,
+
+              course.name,
+
+            ]
+
+          )
+
+        ),
+
+      [courses]
+
+    );
 
   const getCourseName = (
     courseId
   ) =>
-    courseMap[courseId] || "N/A";
+
+    courseMap[courseId] ||
+
+    "N/A";
 
   // ======================================================
-  // INPUT
+  // INPUT CHANGE
   // ======================================================
 
   const handleChange = (e) => {
-    const { name, value } =
-      e.target;
+
+    const {
+      name,
+      value,
+    } = e.target;
 
     setForm((prev) => ({
+
       ...prev,
+
       [name]: value,
+
     }));
+
   };
 
   // ======================================================
-  // RESET
+  // RESET FORM
   // ======================================================
 
   const resetForm = () => {
+
     setForm({
+
       name: "",
+
       course_id: "",
+
     });
 
     setEditingId(null);
+
     setErrorMsg("");
+
   };
 
   // ======================================================
   // SUBMIT
   // ======================================================
 
-  const handleSubmit = async (
-    e
-  ) => {
+  const handleSubmit = async (e) => {
+
     e.preventDefault();
 
     if (submitting) return;
 
     try {
+
       setSubmitting(true);
+
       setErrorMsg("");
 
+      if (!form.name.trim()) {
+
+        throw new Error(
+          "Subject name is required."
+        );
+
+      }
+
+      if (!form.course_id) {
+
+        throw new Error(
+          "Please select a course."
+        );
+
+      }
+
       const payload = {
-        name: form.name.trim(),
-        course_id: Number(
-          form.course_id
-        ),
+
+        name:
+          form.name.trim(),
+
+        course_id:
+          Number(form.course_id),
+
       };
 
-      if (!payload.name) {
-        throw new Error(
-          "Subject name is required"
-        );
-      }
-
-      if (!payload.course_id) {
-        throw new Error(
-          "Please select a course"
-        );
-      }
+      // ==========================================
+      // UPDATE
+      // ==========================================
 
       if (editingId) {
+
         await updateSubject(
+
           editingId,
+
           payload
+
         );
 
         alert(
-          "Subject updated successfully"
+          "Subject updated successfully."
         );
-      } else {
+
+      }
+
+      // ==========================================
+      // CREATE
+      // ==========================================
+
+      else {
+
         await createSubject(
           payload
         );
 
         alert(
-          "Subject created successfully"
+          "Subject created successfully."
         );
+
       }
 
       resetForm();
 
       await fetchData();
+
     } catch (error) {
+
       console.error(error);
 
       setErrorMsg(
+
         error?.message ||
-          "Failed to save subject"
+
+          "Failed to save subject."
+
       );
+
     } finally {
+
       setSubmitting(false);
+
     }
+
   };
 
   // ======================================================
@@ -208,20 +386,32 @@ const Subjects = () => {
   const handleEdit = (
     subject
   ) => {
+
     setForm({
+
       name:
         subject?.name || "",
+
       course_id: String(
-        subject?.course_id || ""
+
+        subject?.course_id ||
+
+        ""
+
       ),
+
     });
 
     setEditingId(subject.id);
 
     window.scrollTo({
+
       top: 0,
+
       behavior: "smooth",
+
     });
+
   };
 
   // ======================================================
@@ -231,6 +421,7 @@ const Subjects = () => {
   const handleDelete = async (
     id
   ) => {
+
     const confirmed =
       window.confirm(
         "Delete this subject?"
@@ -239,23 +430,31 @@ const Subjects = () => {
     if (!confirmed) return;
 
     try {
+
       setErrorMsg("");
 
       await deleteSubject(id);
 
       alert(
-        "Subject deleted successfully"
+        "Subject deleted successfully."
       );
 
       await fetchData();
+
     } catch (error) {
+
       console.error(error);
 
       setErrorMsg(
+
         error?.message ||
-          "Failed to delete subject"
+
+          "Failed to delete subject."
+
       );
+
     }
+
   };
 
   // ======================================================
@@ -263,191 +462,428 @@ const Subjects = () => {
   // ======================================================
 
   return (
-    <div>
-      <div
-        style={{
-          marginBottom: "20px",
-        }}
-      >
-        <h2>Subjects</h2>
 
-        <p
-          style={{
-            color: "#6b7280",
-          }}
-        >
-          Manage subjects and
-          assign them to courses.
-        </p>
+    <div className="subjects-page">
+
+      {/* ======================================================
+          PAGE HEADER
+      ====================================================== */}
+
+      <div className="subjects-header">
+
+        <div>
+
+          <h1>
+            Subject Management
+          </h1>
+
+          <p>
+
+            Manage academic subjects and assign them
+            to their respective courses.
+
+          </p>
+
+        </div>
+
       </div>
 
-      <form
-        onSubmit={handleSubmit}
-        style={formStyle}
-      >
-        <input
-          type="text"
-          name="name"
-          placeholder="Subject Name"
-          value={form.name}
-          onChange={
-            handleChange
-          }
-          required
-        />
+      {/* ======================================================
+          DASHBOARD STATISTICS
+      ====================================================== */}
 
-        <select
-          name="course_id"
-          value={
-            form.course_id
-          }
-          onChange={
-            handleChange
-          }
-          required
-        >
-          <option value="">
-            Select Course
-          </option>
+      <div className="subject-stats">
 
-          {courses.map(
-            (course) => (
-              <option
-                key={
-                  course.id
-                }
-                value={
-                  course.id
-                }
-              >
-                {course.name}
-              </option>
-            )
-          )}
-        </select>
+        <div className="stat-card blue">
 
-        <button
-          type="submit"
-          disabled={
-            submitting
-          }
-        >
-          {submitting
-            ? "Processing..."
-            : editingId
-            ? "Update Subject"
-            : "Create Subject"}
-        </button>
+          <div className="stat-icon">
 
-        {editingId && (
-          <button
-            type="button"
-            onClick={
-              resetForm
+            <FaBook />
+
+          </div>
+
+          <div>
+
+            <h2>{totalSubjects}</h2>
+
+            <span>Total Subjects</span>
+
+          </div>
+
+        </div>
+
+        <div className="stat-card green">
+
+          <div className="stat-icon">
+
+            <FaLayerGroup />
+
+          </div>
+
+          <div>
+
+            <h2>{assignedSubjects}</h2>
+
+            <span>Assigned Subjects</span>
+
+          </div>
+
+        </div>
+
+        <div className="stat-card purple">
+
+          <div className="stat-icon">
+
+            <FaGraduationCap />
+
+          </div>
+
+          <div>
+
+            <h2>{totalCourses}</h2>
+
+            <span>Total Courses</span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* ======================================================
+          SEARCH
+      ====================================================== */}
+
+      <div className="search-card">
+
+        <div className="search-box">
+
+          <FaSearch className="search-icon" />
+
+          <input
+
+            type="text"
+
+            placeholder="Search subject or course..."
+
+            value={search}
+
+            onChange={(e)=>
+              setSearch(e.target.value)
             }
-          >
-            Cancel
-          </button>
-        )}
-      </form>
+
+          />
+
+        </div>
+
+      </div>
+
+      {/* ======================================================
+          FORM CARD
+      ====================================================== */}
+
+      <div className="subject-form-card">
+
+        <h2>
+
+          {editingId
+
+            ? "Update Subject"
+
+            : "Create New Subject"}
+
+        </h2>
+
+        <form
+
+          onSubmit={handleSubmit}
+
+          className="subject-form"
+
+        >
+
+          <div className="form-group">
+
+            <FaBook className="form-icon" />
+
+            <input
+
+              type="text"
+
+              name="name"
+
+              placeholder="Subject Name"
+
+              value={form.name}
+
+              onChange={handleChange}
+
+              required
+
+            />
+
+          </div>
+
+          <div className="form-group">
+
+            <FaGraduationCap className="form-icon" />
+
+            <select
+
+              name="course_id"
+
+              value={form.course_id}
+
+              onChange={handleChange}
+
+              required
+
+            >
+
+              <option value="">
+
+                Select Course
+
+              </option>
+
+              {courses.map((course)=>(
+
+                <option
+
+                  key={course.id}
+
+                  value={course.id}
+
+                >
+
+                  {course.name}
+
+                </option>
+
+              ))}
+
+            </select>
+
+          </div>
+
+          <div className="subject-buttons">
+
+            <button
+
+              type="submit"
+
+              className="save-btn"
+
+              disabled={submitting}
+
+            >
+
+              {submitting ? (
+
+                "Processing..."
+
+              ) : editingId ? (
+
+                <>
+
+                  <FaEdit />
+
+                  Update Subject
+
+                </>
+
+              ) : (
+
+                <>
+
+                  <FaPlus />
+
+                  Create Subject
+
+                </>
+
+              )}
+
+            </button>
+
+            {editingId && (
+
+              <button
+
+                type="button"
+
+                className="cancel-btn"
+
+                onClick={resetForm}
+
+              >
+
+                <FaTimes />
+
+                Cancel
+
+              </button>
+
+            )}
+
+          </div>
+
+        </form>
+
+      </div>
+
+      {/* ======================================================
+          ERROR
+      ====================================================== */}
 
       {errorMsg && (
+
         <ErrorMessage
+
           message={errorMsg}
+
         />
+
       )}
+
+            {/* ======================================================
+          CONTENT
+      ====================================================== */}
 
       {loading ? (
+
         <Loader />
-      ) : subjects.length ===
-        0 ? (
-        <p>
-          No subjects found
-        </p>
+
+      ) : filteredSubjects.length === 0 ? (
+
+        <div className="empty-state">
+
+          <FaBook />
+
+          <h3>No Subjects Found</h3>
+
+          <p>
+            No subject matches your search.
+          </p>
+
+        </div>
+
       ) : (
-        <table
-          style={tableStyle}
-        >
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>
-                Subject Name
-              </th>
-              <th>Course</th>
-              <th>
-                Actions
-              </th>
-            </tr>
-          </thead>
 
-          <tbody>
-            {subjects.map(
-              (subject) => (
-                <tr
-                  key={
-                    subject.id
-                  }
-                >
-                  <td>
-                    {
-                      subject.id
-                    }
-                  </td>
+        <div className="table-wrapper">
+
+          <table className="subject-table">
+
+            <thead>
+
+              <tr>
+
+                <th>Subject</th>
+
+                <th>Course</th>
+
+                <th>Actions</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              {filteredSubjects.map((subject) => (
+
+                <tr key={subject.id}>
+
+                  {/* SUBJECT */}
 
                   <td>
-                    {
-                      subject.name
-                    }
+
+                    <div className="subject-info">
+
+                      <div className="subject-avatar">
+
+                        <FaBook />
+
+                      </div>
+
+                      <div>
+
+                        <strong>
+                          {subject.name}
+                        </strong>
+
+                        <small>
+                          ID #{subject.id}
+                        </small>
+
+                      </div>
+
+                    </div>
+
                   </td>
+
+                  {/* COURSE */}
 
                   <td>
-                    {getCourseName(
-                      subject.course_id
-                    )}
+
+                    <span className="course-badge">
+
+                      {getCourseName(subject.course_id)}
+
+                    </span>
+
                   </td>
+
+                  {/* ACTIONS */}
 
                   <td>
-                    <button
-                      onClick={() =>
-                        handleEdit(
-                          subject
-                        )
-                      }
-                    >
-                      Edit
-                    </button>
 
-                    <button
-                      onClick={() =>
-                        handleDelete(
-                          subject.id
-                        )
-                      }
-                    >
-                      Delete
-                    </button>
+                    <div className="action-buttons">
+
+                      <button
+                        type="button"
+                        className="edit-btn"
+                        onClick={() => handleEdit(subject)}
+                      >
+
+                        <FaEdit />
+
+                        Edit
+
+                      </button>
+
+                      <button
+                        type="button"
+                        className="delete-btn"
+                        onClick={() => handleDelete(subject.id)}
+                      >
+
+                        <FaTrash />
+
+                        Delete
+
+                      </button>
+
+                    </div>
+
                   </td>
+
                 </tr>
-              )
-            )}
-          </tbody>
-        </table>
+
+              ))}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
       )}
+
     </div>
+
   );
-};
 
-const formStyle = {
-  display: "flex",
-  gap: "10px",
-  flexWrap: "wrap",
-  marginBottom: "20px",
-};
-
-const tableStyle = {
-  width: "100%",
-  borderCollapse: "collapse",
 };
 
 export default Subjects;

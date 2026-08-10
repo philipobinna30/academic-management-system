@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from "react";
+
+import "./MyProfile.css";
 
 import { useAuth } from "../../context/AuthContext";
 
@@ -16,11 +21,14 @@ const MyProfile = () => {
   // STATE
   // ======================================================
 
-  const [student, setStudent] = useState(null);
+  const [student, setStudent] =
+    useState(null);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] =
+    useState(false);
 
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] =
+    useState("");
 
   // ======================================================
   // LOAD PROFILE
@@ -31,14 +39,19 @@ const MyProfile = () => {
       setLoading(true);
       setErrorMsg("");
 
-      const data = await getMyProfile();
+      const data =
+        await getMyProfile();
 
       setStudent(data);
     } catch (error) {
-      console.error("Failed to load profile:", error);
+      console.error(
+        "Failed to load profile:",
+        error
+      );
 
       setErrorMsg(
-        error?.message || "Failed to load student profile"
+        error?.message ||
+          "Failed to load student profile"
       );
     } finally {
       setLoading(false);
@@ -56,11 +69,14 @@ const MyProfile = () => {
   }, [user]);
 
   // ======================================================
-  // SAFE FALLBACK MAPPING (FIX CORE ISSUE)
+  // SAFE FALLBACK MAPPING
   // ======================================================
 
   const safeStudent = {
-    id: student?.id ?? student?.student_profile_id ?? "N/A",
+    id:
+      student?.id ??
+      student?.student_profile_id ??
+      "N/A",
 
     user_id:
       student?.user_id ??
@@ -83,6 +99,7 @@ const MyProfile = () => {
 
     role:
       student?.role ??
+      student?.user?.role ??
       user?.role ??
       "student",
 
@@ -101,19 +118,40 @@ const MyProfile = () => {
       student?.parent?.id ??
       "N/A",
 
-    total_score: student?.total_score ?? 0,
-    average_score: student?.average_score ?? 0,
-    gpa: student?.gpa ?? 0,
-    position: student?.position ?? "Not Available",
-    remarks: student?.remarks ?? "No Remarks",
+    total_score:
+      student?.total_score ?? 0,
+
+    average_score:
+      student?.average_score ?? 0,
+
+    gpa:
+      student?.gpa ?? 0,
+
+    position:
+      student?.position ??
+      student?.academic_position ??
+      student?.rank ??
+      "Not Available",
+
+    remarks:
+      student?.remarks ??
+      student?.comment ??
+      student?.note ??
+      "No Remarks",
 
     is_active:
-      student?.is_active ?? true,
+      student?.is_active ??
+      student?.user?.is_active ??
+      true,
 
     email_verified:
-      student?.email_verified ?? false,
+      student?.email_verified ??
+      student?.is_verified ??
+      student?.user?.is_verified ??
+      false,
 
-    created_at: student?.created_at ?? null,
+    created_at:
+      student?.created_at ?? null,
   };
 
   // ======================================================
@@ -124,98 +162,250 @@ const MyProfile = () => {
     return <Loader />;
   }
 
+  // ======================================================
+  // RENDER
+  // ======================================================
+
   return (
-    <div>
-      {/* ======================================================
-          HEADER
-      ====================================================== */}
+    <div className="my-profile-page">
 
-      <div style={{ marginBottom: "30px" }}>
-        <h1 style={{ fontSize: "30px", marginBottom: "10px" }}>
-          My Profile
-        </h1>
+      {/* ==================================================
+          PAGE HEADER
+      ================================================== */}
 
-        <p style={{ color: "#6b7280" }}>
-          View your personal and academic information
-        </p>
+      <div className="my-profile-header">
+
+        <div className="profile-header-content">
+
+          <div className="profile-header-icon">
+            👤
+          </div>
+
+          <div>
+            <h1>
+              My Profile
+            </h1>
+
+            <p>
+              View your personal and academic information
+            </p>
+          </div>
+
+        </div>
+
       </div>
 
-      {/* ======================================================
+      {/* ==================================================
           ERROR
-      ====================================================== */}
+      ================================================== */}
 
-      {errorMsg && <ErrorMessage message={errorMsg} />}
-
-      {/* ======================================================
-          EMPTY STATE
-      ====================================================== */}
-
-      {!loading && !student && !errorMsg && (
-        <div
-          style={{
-            background: "#fff",
-            padding: "20px",
-            borderRadius: "10px",
-          }}
-        >
-          <p>No student profile available.</p>
-        </div>
-      )}
-
-      {/* ======================================================
-          PROFILE
-      ====================================================== */}
-
-      {student && (
-        <div
-          style={{
-            background: "#fff",
-            padding: "30px",
-            borderRadius: "10px",
-            boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
-            maxWidth: "700px",
-          }}
-        >
-          <ProfileRow label="Student Profile ID" value={safeStudent.id} />
-
-          <ProfileRow label="User ID" value={safeStudent.user_id} />
-
-          <ProfileRow label="Full Name" value={safeStudent.full_name} />
-
-          <ProfileRow label="Email" value={safeStudent.email} />
-
-          <ProfileRow label="Role" value={safeStudent.role} />
-
-          <ProfileRow label="Account Active" value={safeStudent.is_active ? "Yes" : "No"} />
-
-          <ProfileRow label="Email Verified" value={safeStudent.email_verified ? "Yes" : "No"} />
-
-          <ProfileRow label="Course" value={safeStudent.course_name} />
-
-          <ProfileRow label="Course ID" value={safeStudent.course_id} />
-
-          <ProfileRow label="Parent ID" value={safeStudent.parent_id} />
-
-          <ProfileRow label="Total Score" value={safeStudent.total_score} />
-
-          <ProfileRow label="Average Score" value={safeStudent.average_score} />
-
-          <ProfileRow label="GPA" value={safeStudent.gpa} />
-
-          <ProfileRow label="Position" value={safeStudent.position} />
-
-          <ProfileRow label="Remarks" value={safeStudent.remarks} />
-
-          <ProfileRow
-            label="Created At"
-            value={
-              safeStudent.created_at
-                ? new Date(safeStudent.created_at).toLocaleString()
-                : "N/A"
-            }
+      {errorMsg && (
+        <div className="my-profile-error">
+          <ErrorMessage
+            message={errorMsg}
           />
         </div>
       )}
+
+      {/* ==================================================
+          EMPTY STATE
+      ================================================== */}
+
+      {!loading &&
+        !student &&
+        !errorMsg && (
+          <div className="profile-empty-state">
+
+            <div className="empty-icon">
+              👤
+            </div>
+
+            <h3>
+              No Student Profile
+            </h3>
+
+            <p>
+              No student profile information
+              is currently available.
+            </p>
+
+          </div>
+        )}
+
+      {/* ==================================================
+          PROFILE CONTENT
+      ================================================== */}
+
+      {student && (
+        <div className="profile-content">
+
+          {/* ==============================================
+              ACCOUNT INFORMATION
+          ============================================== */}
+
+          <section className="profile-section">
+
+            <div className="profile-section-header account-header">
+
+              <div className="section-icon">
+                👤
+              </div>
+
+              <div>
+                <h2>
+                  Account Information
+                </h2>
+
+                <p>
+                  Your personal and account details
+                </p>
+              </div>
+
+            </div>
+
+            <div className="profile-grid">
+
+              <ProfileRow
+                label="Student Profile ID"
+                value={safeStudent.id}
+              />
+
+              <ProfileRow
+                label="User ID"
+                value={safeStudent.user_id}
+              />
+
+              <ProfileRow
+                label="Full Name"
+                value={safeStudent.full_name}
+              />
+
+              <ProfileRow
+                label="Email"
+                value={safeStudent.email}
+              />
+
+              <ProfileRow
+                label="Role"
+                value={safeStudent.role}
+              />
+
+              <ProfileRow
+                label="Account Active"
+                value={
+                  safeStudent.is_active
+                    ? "Yes"
+                    : "No"
+                }
+                valueClass={
+                  safeStudent.is_active
+                    ? "status-active"
+                    : "status-inactive"
+                }
+              />
+
+              <ProfileRow
+                label="Email Verified"
+                value={
+                  safeStudent.email_verified
+                    ? "Yes"
+                    : "No"
+                }
+                valueClass={
+                  safeStudent.email_verified
+                    ? "status-active"
+                    : "status-inactive"
+                }
+              />
+
+            </div>
+
+          </section>
+
+          {/* ==============================================
+              ACADEMIC INFORMATION
+          ============================================== */}
+
+          <section className="profile-section">
+
+            <div className="profile-section-header academic-header">
+
+              <div className="section-icon">
+                🎓
+              </div>
+
+              <div>
+                <h2>
+                  Academic Information
+                </h2>
+
+                <p>
+                  Your course and academic performance
+                </p>
+              </div>
+
+            </div>
+
+            <div className="profile-grid">
+
+              <ProfileRow
+                label="Course"
+                value={safeStudent.course_name}
+              />
+
+              <ProfileRow
+                label="Course ID"
+                value={safeStudent.course_id}
+              />
+
+              <ProfileRow
+                label="Parent ID"
+                value={safeStudent.parent_id}
+              />
+
+              <ProfileRow
+                label="Total Score"
+                value={safeStudent.total_score}
+              />
+
+              <ProfileRow
+                label="Average Score"
+                value={safeStudent.average_score}
+              />
+
+              <ProfileRow
+                label="GPA"
+                value={safeStudent.gpa}
+              />
+
+              <ProfileRow
+                label="Position"
+                value={safeStudent.position}
+              />
+
+              <ProfileRow
+                label="Remarks"
+                value={safeStudent.remarks}
+              />
+
+              <ProfileRow
+                label="Created At"
+                value={
+                  safeStudent.created_at
+                    ? new Date(
+                        safeStudent.created_at
+                      ).toLocaleString()
+                    : "N/A"
+                }
+              />
+
+            </div>
+
+          </section>
+
+        </div>
+      )}
+
     </div>
   );
 };
@@ -224,35 +414,30 @@ const MyProfile = () => {
 // PROFILE ROW
 // ======================================================
 
-const ProfileRow = ({ label, value }) => {
+const ProfileRow = ({
+  label,
+  value,
+  valueClass = "",
+}) => {
   return (
-    <div
-      style={{
-        marginBottom: "20px",
-        paddingBottom: "12px",
-        borderBottom: "1px solid #e5e7eb",
-      }}
-    >
-      <h3
-        style={{
-          marginBottom: "6px",
-          color: "#374151",
-          fontSize: "15px",
-        }}
-      >
-        {label}
-      </h3>
+    <div className="profile-row">
 
-      <p
-        style={{
-          color: "#111827",
-          fontSize: "17px",
-        }}
+      <div className="profile-label">
+        {label}
+      </div>
+
+      <div
+        className={`profile-value ${valueClass}`}
       >
         {value}
-      </p>
+      </div>
+
     </div>
   );
 };
+
+// ======================================================
+// EXPORT
+// ======================================================
 
 export default MyProfile;

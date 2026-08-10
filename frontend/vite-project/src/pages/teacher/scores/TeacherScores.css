@@ -1,0 +1,315 @@
+/* ======================================================
+   TeacherScores.css
+====================================================== */
+
+.teacher-scores-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ======================================================
+   HEADER
+====================================================== */
+
+.teacher-score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 28px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.teacher-score-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #1f2937;
+}
+
+.teacher-score-header p {
+  margin-top: 8px;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+/* ======================================================
+   SUCCESS MESSAGE
+====================================================== */
+
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.success-message svg {
+  font-size: 18px;
+}
+
+/* ======================================================
+   FORM CARD
+====================================================== */
+
+.score-form-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.score-form-card h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #1f2937;
+}
+
+/* ======================================================
+   FORM
+====================================================== */
+
+.score-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.score-form input,
+.score-form select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: 0.25s;
+  background: #fff;
+}
+
+.score-form input:focus,
+.score-form select:focus {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
+}
+
+.score-form input[readonly] {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* ======================================================
+   BUTTON GROUP
+====================================================== */
+
+.form-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  grid-column: 1 / -1;
+  margin-top: 10px;
+}
+
+.save-btn,
+.cancel-btn,
+.edit-btn,
+.delete-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 11px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: .25s;
+}
+
+.save-btn {
+  background: #2563eb;
+  color: #fff;
+}
+
+.save-btn:hover {
+  background: #1d4ed8;
+}
+
+.save-btn:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.cancel-btn {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.cancel-btn:hover {
+  background: #d1d5db;
+}
+
+.edit-btn {
+  background: #2563eb;
+  color: white;
+}
+
+.edit-btn:hover {
+  background: #1d4ed8;
+}
+
+.delete-btn {
+  background: #dc2626;
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #b91c1c;
+}
+
+/* ======================================================
+   TABLE
+====================================================== */
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .06);
+}
+
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.score-table thead {
+  background: #2563eb;
+}
+
+.score-table thead th {
+  color: white;
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.score-table tbody td {
+  padding: 14px 15px;
+  border-bottom: 1px solid #e5e7eb;
+  color: #374151;
+}
+
+.score-table tbody tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+.score-table tbody tr:hover {
+  background: #eff6ff;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ======================================================
+   EMPTY STATE
+====================================================== */
+
+.empty-state {
+  background: #ffffff;
+  padding: 50px 25px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .06);
+}
+
+.empty-state h3 {
+  margin: 0 0 12px;
+  color: #1f2937;
+}
+
+.empty-state p {
+  color: #6b7280;
+}
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+
+@media (max-width: 992px) {
+
+  .teacher-score-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .score-form {
+    grid-template-columns: 1fr;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .teacher-score-header {
+    padding: 20px;
+  }
+
+  .teacher-score-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .score-form-card {
+    padding: 20px;
+  }
+
+  .score-table {
+    min-width: 750px;
+  }
+
+}
+
+@media (max-width: 576px) {
+
+  .teacher-score-header {
+    padding: 18px;
+  }
+
+  .teacher-score-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .score-form-card {
+    padding: 16px;
+  }
+
+  .success-message {
+    flex-direction: column;
+    text-align: center;
+  }
+
+}

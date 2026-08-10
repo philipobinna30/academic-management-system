@@ -19,6 +19,9 @@ from fastapi.responses import (
     FileResponse
 )
 
+
+from sqlalchemy import func
+
 from sqlalchemy.orm import Session
 
 from typing import (
@@ -439,90 +442,214 @@ def update_student_analytics_task(student_id: int):
 # ======================================================
 # COURSES CRUD
 # ======================================================
-
 @router.post("/courses/", response_model=CourseResponse)
 def create_course(
     data: CourseCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     require_teacher_or_admin(current_user)
 
-    course = Course(**data.dict())
+    payload = data.model_dump()
+
+    payload["name"] = payload["name"].strip()
+
+    existing_course = (
+        db.query(Course)
+        .filter(
+            func.lower(Course.name)
+            == payload["name"].lower()
+        )
+        .first()
+    )
+
+    if existing_course:
+        raise HTTPException(
+            status_code=400,
+            detail="Course already exists.",
+        )
+
+    course = Course(**payload)
+
     db.add(course)
     db.commit()
     db.refresh(course)
 
-    log_action(db, current_user, "create_course", f"Course {course.name}")
+    log_action(
+        db,
+        current_user,
+        "create_course",
+        f"Created course '{course.name}'",
+    )
+
     return course
 
 
+# ------------------------------------------------------
+# GET ALL COURSES
+# ------------------------------------------------------
 @router.get("/courses", response_model=List[CourseResponse])
 def get_courses(
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     require_teacher_or_admin(current_user)
-    return db.query(Course).all()
+
+    return (
+        db.query(Course)
+        .order_by(Course.name.asc())
+        .all()
+    )
 
 
+# ------------------------------------------------------
+# GET SINGLE COURSE
+# ------------------------------------------------------
 @router.get("/courses/{course_id}", response_model=CourseResponse)
 def get_course(
     course_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     require_teacher_or_admin(current_user)
 
-    course = db.query(Course).filter(Course.id == course_id).first()
+    course = (
+        db.query(Course)
+        .filter(Course.id == course_id)
+        .first()
+    )
+
     if not course:
-        raise HTTPException(status_code=404, detail="Course not found")
+        raise HTTPException(
+            status_code=404,
+            detail="Course not found",
+        )
 
     return course
 
 
+# ------------------------------------------------------
+# UPDATE COURSE
+# ------------------------------------------------------
 @router.patch("/courses/{course_id}", response_model=CourseResponse)
 def update_course(
     course_id: int,
     data: CourseUpdate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     require_teacher_or_admin(current_user)
 
-    course = db.query(Course).filter(Course.id == course_id).first()
-    if not course:
-        raise HTTPException(status_code=404, detail="Course not found")
+    course = (
+        db.query(Course)
+        .filter(Course.id == course_id)
+        .first()
+    )
 
-    for key, value in data.dict(exclude_unset=True).items():
+    if not course:
+        raise HTTPException(
+            status_code=404,
+            detail="Course not found",
+        )
+
+    payload = data.model_dump(exclude_unset=True)
+
+    # ------------------------------------------
+    # CHECK DUPLICATE NAME
+    # ------------------------------------------
+
+    if "name" in payload:
+
+        payload["name"] = payload["name"].strip()
+
+        existing_course = (
+            db.query(Course)
+            .filter(
+                func.lower(Course.name)
+                == payload["name"].lower(),
+                Course.id != course_id,
+            )
+            .first()
+        )
+
+        if existing_course:
+            raise HTTPException(
+                status_code=400,
+                detail="Course name already exists.",
+            )
+
+    for key, value in payload.items():
         setattr(course, key, value)
 
     db.commit()
     db.refresh(course)
 
-    log_action(db, current_user, "update_course", f"Course {course_id}")
+    log_action(
+        db,
+        current_user,
+        "update_course",
+        f"Updated course '{course.name}'",
+    )
+
     return course
 
 
+# ------------------------------------------------------
+# DELETE COURSE
+# ------------------------------------------------------
 @router.delete("/courses/{course_id}")
 def delete_course(
     course_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     require_teacher_or_admin(current_user)
 
-    course = db.query(Course).filter(Course.id == course_id).first()
+    course = (
+        db.query(Course)
+        .filter(Course.id == course_id)
+        .first()
+    )
+
     if not course:
-        raise HTTPException(status_code=404, detail="Course not found")
+        raise HTTPException(
+            status_code=404,
+            detail="Course not found",
+        )
+
+    # ------------------------------------------
+    # CHECK IF COURSE IS ASSIGNED TO STUDENTS
+    # ------------------------------------------
+
+    assigned_student = (
+        db.query(StudentProfile)
+        .filter(
+            StudentProfile.course_id == course_id
+        )
+        .first()
+    )
+
+    if assigned_student:
+        raise HTTPException(
+            status_code=400,
+            detail="Cannot delete course because students are assigned to it.",
+        )
+
+    course_name = course.name
 
     db.delete(course)
     db.commit()
 
-    log_action(db, current_user, "delete_course", f"Course {course_id}")
-    return {"message": "Course deleted successfully"}
+    log_action(
+        db,
+        current_user,
+        "delete_course",
+        f"Deleted course '{course_name}'",
+    )
 
-
+    return {
+        "message": "Course deleted successfully"
+    }
 # ======================================================
 # BULK SUBJECT ASSIGNMENT
 # ======================================================

@@ -3,6 +3,8 @@ import React, {
   useState,
 } from "react";
 
+import "./MyTranscript.css";
+
 import { useAuth } from "../../context/AuthContext";
 
 import {
@@ -13,12 +15,19 @@ import {
   printStudentTranscript,
 } from "../../services/resultService";
 
+/**
+ * ======================================================
+ * My Transcript
+ * ======================================================
+ */
+
 const MyTranscript = () => {
   const { user } = useAuth();
 
   // ======================================================
   // STATES
   // ======================================================
+
   const [profile, setProfile] =
     useState(null);
 
@@ -32,8 +41,9 @@ const MyTranscript = () => {
     useState("");
 
   // ======================================================
-  // HARD-CODED SCHOOL INFO
+  // SCHOOL INFORMATION
   // ======================================================
+
   const school = {
     name: "MY APO SCHOOL",
     motto: "EXCELLENCY",
@@ -46,12 +56,15 @@ const MyTranscript = () => {
   // ======================================================
   // LOAD PROFILE
   // ======================================================
+
   useEffect(() => {
     loadProfile();
   }, []);
 
   const loadProfile = async () => {
     try {
+      setErrorMsg("");
+
       const data =
         await getMyProfile();
 
@@ -61,12 +74,18 @@ const MyTranscript = () => {
         "Profile load failed:",
         error
       );
+
+      setErrorMsg(
+        error?.message ||
+          "Failed to load student profile."
+      );
     }
   };
 
   // ======================================================
   // DOWNLOAD TRANSCRIPT
   // ======================================================
+
   const handleDownload =
     async () => {
       try {
@@ -88,6 +107,12 @@ const MyTranscript = () => {
           await printStudentTranscript(
             user.student_profile_id
           );
+
+        if (!blob) {
+          throw new Error(
+            "No transcript file was returned."
+          );
+        }
 
         const url =
           window.URL.createObjectURL(
@@ -122,11 +147,14 @@ const MyTranscript = () => {
           "Transcript downloaded successfully."
         );
       } catch (error) {
-        console.error(error);
+        console.error(
+          "Transcript download failed:",
+          error
+        );
 
         setErrorMsg(
           error?.message ||
-            "Failed to download transcript"
+            "Failed to download transcript."
         );
       } finally {
         setLoading(false);
@@ -134,148 +162,134 @@ const MyTranscript = () => {
     };
 
   // ======================================================
-  // RETRY
+  // RETRY DOWNLOAD
   // ======================================================
-  const retryDownload =
-    () => {
-      setErrorMsg("");
-      handleDownload();
-    };
+
+  const retryDownload = () => {
+    setErrorMsg("");
+    handleDownload();
+  };
+
+  // ======================================================
+  // SAFE PROFILE DATA
+  // ======================================================
+
+  const safeProfile = {
+    id:
+      profile?.id ??
+      profile?.student_profile_id ??
+      user?.student_profile_id ??
+      "N/A",
+
+    full_name:
+      profile?.full_name ??
+      profile?.user?.full_name ??
+      user?.full_name ??
+      "N/A",
+
+    email:
+      profile?.email ??
+      profile?.user?.email ??
+      user?.email ??
+      "N/A",
+
+    course_name:
+      profile?.course_name ??
+      profile?.course?.name ??
+      "N/A",
+
+    role:
+      profile?.role ??
+      profile?.user?.role ??
+      user?.role ??
+      "student",
+  };
+
+  // ======================================================
+  // RENDER
+  // ======================================================
 
   return (
-    <div>
-      {/* ======================================================
+    <div className="my-transcript">
+
+      {/* ==================================================
           HEADER
-      ====================================================== */}
+      ================================================== */}
 
-      <div
-        style={{
-          marginBottom:
-            "30px",
-        }}
-      >
-        <h1
-          style={{
-            fontSize:
-              "30px",
-            marginBottom:
-              "10px",
-          }}
-        >
-          My Transcript
-        </h1>
+      <div className="my-transcript-header">
 
-        <p
-          style={{
-            color:
-              "#6b7280",
-          }}
-        >
-          Download and preview your
-          academic transcript
-        </p>
+        <div>
+          <h1>
+            My Transcript
+          </h1>
+
+          <p>
+            Download and preview your
+            academic transcript
+          </p>
+        </div>
+
       </div>
 
-      {/* SUCCESS */}
+      {/* ==================================================
+          SUCCESS MESSAGE
+      ================================================== */}
 
       {successMsg && (
-        <div
-          style={{
-            background:
-              "#dcfce7",
-            color:
-              "#166534",
-            padding:
-              "15px",
-            borderRadius:
-              "8px",
-            marginBottom:
-              "20px",
-          }}
-        >
-          {successMsg}
+        <div className="transcript-success">
+          <span className="message-icon">
+            ✓
+          </span>
+
+          <span>
+            {successMsg}
+          </span>
         </div>
       )}
 
-      {/* ERROR */}
+      {/* ==================================================
+          ERROR MESSAGE
+      ================================================== */}
 
       {errorMsg && (
-        <div
-          style={{
-            background:
-              "#fee2e2",
-            color:
-              "#b91c1c",
-            padding:
-              "15px",
-            borderRadius:
-              "8px",
-            marginBottom:
-              "20px",
-          }}
-        >
-          {errorMsg}
+        <div className="transcript-error">
+
+          <div className="error-content">
+
+            <span className="message-icon">
+              !
+            </span>
+
+            <span>
+              {errorMsg}
+            </span>
+
+          </div>
 
           <button
-            onClick={
-              retryDownload
-            }
-            style={{
-              marginLeft:
-                "15px",
-              padding:
-                "8px 14px",
-              border:
-                "none",
-              borderRadius:
-                "6px",
-              background:
-                "#2563eb",
-              color:
-                "#fff",
-              cursor:
-                "pointer",
-            }}
+            type="button"
+            onClick={retryDownload}
+            className="retry-button"
           >
             Retry
           </button>
+
         </div>
       )}
 
-      {/* ======================================================
-          PREVIEW CARD
-      ====================================================== */}
+      {/* ==================================================
+          TRANSCRIPT PREVIEW
+      ================================================== */}
 
-      <div
-        style={{
-          background:
-            "#fff",
-          padding:
-            "30px",
-          borderRadius:
-            "10px",
-          maxWidth:
-            "650px",
-          boxShadow:
-            "0 2px 10px rgba(0,0,0,0.05)",
-        }}
-      >
-        {/* SCHOOL HEADER */}
+      <div className="transcript-preview">
 
-        <div
-          style={{
-            textAlign:
-              "center",
-            marginBottom:
-              "25px",
-          }}
-        >
-          <div
-            style={{
-              fontSize:
-                "40px",
-            }}
-          >
+        {/* ==================================================
+            SCHOOL HEADER
+        ================================================== */}
+
+        <div className="transcript-school-header">
+
+          <div className="school-logo">
             {school.logo}
           </div>
 
@@ -283,125 +297,187 @@ const MyTranscript = () => {
             {school.name}
           </h2>
 
-          <p
-            style={{
-              color:
-                "#6b7280",
-            }}
-          >
+          <p className="school-motto">
             {school.motto}
           </p>
+
+          <p className="school-address">
+            {school.address}
+          </p>
+
+          <div className="school-contact">
+
+            <span>
+              {school.phone}
+            </span>
+
+            <span>
+              {school.email}
+            </span>
+
+          </div>
+
         </div>
 
-        {/* STUDENT DETAILS */}
+        {/* ==================================================
+            TITLE
+        ================================================== */}
 
-        <div
-          style={{
-            background:
-              "#f9fafb",
-            padding:
-              "20px",
-            borderRadius:
-              "8px",
-            marginBottom:
-              "20px",
-          }}
-        >
-          <p>
-            <strong>
-              Name:
-            </strong>{" "}
-            {profile?.full_name ||
-              "N/A"}
-          </p>
+        <div className="transcript-title">
 
-          <p>
-            <strong>
-              Email:
-            </strong>{" "}
-            {profile?.email ||
-              "N/A"}
-          </p>
+          <span className="title-line"></span>
 
-          <p>
-            <strong>
-              Student ID:
-            </strong>{" "}
-            {profile?.id ||
-              user?.student_profile_id ||
-              "N/A"}
-          </p>
+          <h3>
+            ACADEMIC TRANSCRIPT
+          </h3>
 
-          <p>
-            <strong>
-              Course:
-            </strong>{" "}
-            {profile?.course_name ||
-              "N/A"}
-          </p>
+          <span className="title-line"></span>
 
-          <p>
-            <strong>
-              Role:
-            </strong>{" "}
-            {profile?.role ||
-              "student"}
-          </p>
         </div>
 
-        <p
-          style={{
-            color:
-              "#6b7280",
-            marginBottom:
-              "20px",
-          }}
-        >
-          This is a preview of your
-          transcript before download.
-        </p>
+        {/* ==================================================
+            STUDENT INFORMATION
+        ================================================== */}
 
-        {/* DOWNLOAD */}
+        <div className="student-information">
 
-        <button
-          onClick={
-            handleDownload
-          }
-          disabled={
-            loading
-          }
-          style={{
-            width:
-              "100%",
-            padding:
-              "12px 18px",
-            border:
-              "none",
-            borderRadius:
-              "6px",
-            background:
+          <div className="information-header">
+            <h3>
+              Student Information
+            </h3>
+          </div>
+
+          <div className="student-info-grid">
+
+            <TranscriptInfo
+              label="Student Name"
+              value={
+                safeProfile.full_name
+              }
+            />
+
+            <TranscriptInfo
+              label="Student ID"
+              value={
+                safeProfile.id
+              }
+            />
+
+            <TranscriptInfo
+              label="Email"
+              value={
+                safeProfile.email
+              }
+            />
+
+            <TranscriptInfo
+              label="Course"
+              value={
+                safeProfile.course_name
+              }
+            />
+
+            <TranscriptInfo
+              label="Role"
+              value={
+                safeProfile.role
+              }
+            />
+
+          </div>
+
+        </div>
+
+        {/* ==================================================
+            PREVIEW NOTICE
+        ================================================== */}
+
+        <div className="transcript-notice">
+
+          <div className="notice-icon">
+            📄
+          </div>
+
+          <div>
+            <h4>
+              Transcript Preview
+            </h4>
+
+            <p>
+              This is a preview of your
+              academic transcript. Your
+              complete transcript will be
+              generated as a PDF when you
+              click the download button.
+            </p>
+          </div>
+
+        </div>
+
+        {/* ==================================================
+            DOWNLOAD
+        ================================================== */}
+
+        <div className="transcript-download">
+
+          <button
+            type="button"
+            onClick={handleDownload}
+            disabled={loading}
+            className={
               loading
-                ? "#9ca3af"
-                : "#2563eb",
-            color:
-              "#fff",
-            cursor:
-              loading
-                ? "not-allowed"
-                : "pointer",
-            fontSize:
-              "15px",
-            fontWeight:
-              "600",
-          }}
-        >
-          {loading
-            ? "Downloading..."
-            : "Download Transcript"}
-        </button>
+                ? "download-transcript-button loading"
+                : "download-transcript-button"
+            }
+          >
+
+            {loading ? (
+              <>
+                <span className="button-spinner"></span>
+                Downloading...
+              </>
+            ) : (
+              <>
+                <span className="download-icon">
+                  ↓
+                </span>
+
+                Download Transcript
+              </>
+            )}
+
+          </button>
+
+        </div>
+
       </div>
+
+    </div>
+  );
+};
+
+// ======================================================
+// TRANSCRIPT INFORMATION ROW
+// ======================================================
+
+const TranscriptInfo = ({
+  label,
+  value,
+}) => {
+  return (
+    <div className="transcript-info-item">
+
+      <span className="transcript-info-label">
+        {label}
+      </span>
+
+      <span className="transcript-info-value">
+        {value ?? "N/A"}
+      </span>
+
     </div>
   );
 };
 
 export default MyTranscript;
+

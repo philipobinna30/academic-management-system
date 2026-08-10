@@ -1,0 +1,571 @@
+/* ==========================================================
+   MYAPO Academic Management System
+   Courses Page
+========================================================== */
+
+.courses-page{
+    width:100%;
+    animation:fadeIn .4s ease;
+}
+
+/* ==========================================================
+   PAGE HEADER
+========================================================== */
+
+.courses-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+.courses-header h1{
+    margin:0;
+    font-size:30px;
+    color:#1e293b;
+    font-weight:700;
+}
+
+.courses-header p{
+    margin-top:6px;
+    color:#64748b;
+    font-size:15px;
+}
+
+/* ==========================================================
+   DASHBOARD CARDS
+========================================================== */
+
+.course-stats{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(220px,1fr));
+    gap:18px;
+    margin-bottom:28px;
+}
+
+.course-stat-card{
+    display:flex;
+    align-items:center;
+    gap:18px;
+
+    background:#fff;
+    border-radius:18px;
+
+    padding:20px;
+
+    box-shadow:0 10px 25px rgba(15,23,42,.06);
+
+    transition:.25s;
+}
+
+.course-stat-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 18px 35px rgba(37,99,235,.12);
+}
+
+.course-icon{
+    width:60px;
+    height:60px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:16px;
+
+    color:#fff;
+
+    font-size:24px;
+
+    flex-shrink:0;
+}
+
+.course-blue{
+    background:#2563eb;
+}
+
+.course-green{
+    background:#16a34a;
+}
+
+.course-orange{
+    background:#ea580c;
+}
+
+.course-stat-card h2{
+    margin:0;
+    font-size:28px;
+    color:#0f172a;
+}
+
+.course-stat-card span{
+    color:#64748b;
+    font-size:14px;
+}
+
+/* ==========================================================
+   SEARCH
+========================================================== */
+
+.search-card{
+    background:#fff;
+    padding:20px;
+    border-radius:18px;
+    margin-bottom:25px;
+
+    box-shadow:0 8px 22px rgba(15,23,42,.05);
+}
+
+.search-box{
+    position:relative;
+}
+
+.search-box input{
+    width:100%;
+    height:50px;
+
+    border:1px solid #dbe4ee;
+    border-radius:12px;
+
+    padding-left:48px;
+    padding-right:18px;
+
+    font-size:15px;
+
+    transition:.25s;
+}
+
+.search-box input:focus{
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+
+.search-icon{
+    position:absolute;
+    left:16px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#94a3b8;
+    font-size:17px;
+}
+
+/* ==========================================================
+   FORM CARD
+========================================================== */
+
+.course-form-card{
+    background:#fff;
+    border-radius:20px;
+    padding:28px;
+    margin-bottom:28px;
+
+    box-shadow:0 10px 25px rgba(15,23,42,.06);
+}
+
+.course-form-card h2{
+    margin:0 0 22px;
+    color:#1e293b;
+    font-size:22px;
+}
+
+.course-form{
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fit,minmax(250px,1fr));
+    gap:18px;
+}
+
+.form-group{
+    position:relative;
+}
+
+.form-icon{
+    position:absolute;
+    left:16px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#64748b;
+    font-size:16px;
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+    height:50px;
+
+    padding-left:48px;
+    padding-right:16px;
+
+    border:1px solid #dbe4ee;
+    border-radius:12px;
+
+    background:#fff;
+
+    font-size:15px;
+
+    transition:.25s;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+
+/* ==========================================================
+   BUTTONS
+========================================================== */
+
+.course-buttons{
+    grid-column:1/-1;
+
+    display:flex;
+    gap:15px;
+    margin-top:10px;
+    flex-wrap:wrap;
+}
+
+.save-btn,
+.cancel-btn{
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
+    padding:13px 24px;
+
+    border:none;
+    border-radius:12px;
+
+    font-size:15px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.save-btn{
+
+    background:#2563eb;
+    color:#fff;
+}
+
+.save-btn:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-2px);
+}
+
+.save-btn:disabled{
+
+    opacity:.65;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.cancel-btn{
+
+    background:#e5e7eb;
+    color:#334155;
+}
+
+.cancel-btn:hover{
+
+    background:#cbd5e1;
+}
+
+/* ==========================================================
+   TABLE CARD
+========================================================== */
+
+.course-table-card{
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:20px;
+
+    box-shadow:0 10px 25px rgba(15,23,42,.06);
+
+    overflow-x:auto;
+}
+
+/* ==========================================================
+   TABLE
+========================================================== */
+
+.course-table-card table{
+
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+.course-table-card th{
+
+    background:#f8fafc;
+
+    color:#334155;
+
+    font-weight:700;
+
+    padding:16px;
+
+    text-align:left;
+
+    border-bottom:1px solid #e2e8f0;
+}
+
+.course-table-card td{
+
+    padding:15px;
+
+    border-bottom:1px solid #edf2f7;
+
+    color:#475569;
+}
+
+.course-table-card tbody tr{
+
+    transition:.25s;
+}
+
+.course-table-card tbody tr:hover{
+
+    background:#f8fbff;
+}
+
+/* ==========================================================
+   EMPTY STATE
+========================================================== */
+
+.empty-state{
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:70px 30px;
+
+    text-align:center;
+
+    box-shadow:0 10px 25px rgba(15,23,42,.05);
+}
+
+.empty-state svg{
+
+    font-size:65px;
+
+    color:#94a3b8;
+
+    margin-bottom:20px;
+}
+
+.empty-state h3{
+
+    color:#1e293b;
+
+    margin-bottom:10px;
+}
+
+.empty-state p{
+
+    color:#64748b;
+
+    max-width:420px;
+
+    margin:auto;
+
+    line-height:1.6;
+}
+
+/* ==========================================================
+   BADGES
+========================================================== */
+
+.teacher-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    background:#eff6ff;
+
+    color:#2563eb;
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    font-weight:600;
+}
+
+.unassigned-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    background:#fef3c7;
+
+    color:#b45309;
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    font-weight:600;
+}
+
+/* ==========================================================
+   SCROLLBAR
+========================================================== */
+
+.course-table-card::-webkit-scrollbar{
+
+    height:8px;
+}
+
+.course-table-card::-webkit-scrollbar-thumb{
+
+    background:#cbd5e1;
+
+    border-radius:10px;
+}
+
+.course-table-card::-webkit-scrollbar-thumb:hover{
+
+    background:#94a3b8;
+}
+
+/* ==========================================================
+   ANIMATION
+========================================================== */
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(12px);
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+    }
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media (max-width:992px){
+
+    .course-stats{
+
+        grid-template-columns:1fr;
+    }
+
+    .course-form{
+
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media (max-width:768px){
+
+    .courses-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+    }
+
+    .courses-header h1{
+
+        font-size:26px;
+    }
+
+    .course-form-card{
+
+        padding:22px;
+    }
+
+    .course-buttons{
+
+        flex-direction:column;
+    }
+
+    .save-btn,
+    .cancel-btn{
+
+        width:100%;
+    }
+
+}
+
+@media (max-width:576px){
+
+    .courses-header h1{
+
+        font-size:22px;
+    }
+
+    .course-form-card{
+
+        padding:18px;
+    }
+
+    .search-card{
+
+        padding:16px;
+    }
+
+    .course-table-card{
+
+        padding:12px;
+    }
+
+    .course-stat-card{
+
+        padding:16px;
+    }
+
+    .course-icon{
+
+        width:50px;
+        height:50px;
+
+        font-size:20px;
+    }
+
+    .course-stat-card h2{
+
+        font-size:22px;
+    }
+
+}

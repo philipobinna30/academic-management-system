@@ -1,0 +1,755 @@
+/* ==========================================================
+   MYAPO Academic Management System
+   Professional Admin Dashboard
+==========================================================*/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+.admin-dashboard{
+
+    width:100%;
+
+    min-height:100vh;
+
+    padding:35px;
+
+    background:#f4f8fc;
+
+}
+
+/*==========================================================
+HEADER
+==========================================================*/
+
+.dashboard-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:30px;
+
+    margin-bottom:35px;
+
+    flex-wrap:wrap;
+
+}
+
+.dashboard-header h1{
+
+    font-size:38px;
+
+    font-weight:700;
+
+    color:#0f172a;
+
+    margin-top:10px;
+
+}
+
+.dashboard-header h1 span{
+
+    color:#2563eb;
+
+}
+
+.dashboard-header p{
+
+    margin-top:12px;
+
+    color:#64748b;
+
+    line-height:1.7;
+
+    max-width:700px;
+
+}
+
+.dashboard-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    background:#dbeafe;
+
+    color:#2563eb;
+
+    padding:8px 18px;
+
+    border-radius:30px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+.dashboard-date{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:18px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+    min-width:220px;
+
+    text-align:center;
+
+}
+
+.dashboard-date h3{
+
+    color:#1e293b;
+
+    font-size:20px;
+
+}
+
+.dashboard-date span{
+
+    display:block;
+
+    color:#64748b;
+
+    margin-top:6px;
+
+}
+
+.status-online{
+
+    margin-top:15px;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    background:#dcfce7;
+
+    color:#16a34a;
+
+    padding:8px 18px;
+
+    border-radius:25px;
+
+    font-weight:600;
+
+}
+
+/*==========================================================
+QUICK ACTIONS
+==========================================================*/
+
+.quick-actions{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:15px;
+
+    margin-bottom:35px;
+
+}
+
+.quick-actions button{
+
+    border:none;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:14px 22px;
+
+    background:#2563eb;
+
+    color:white;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.30s;
+
+    box-shadow:0 8px 18px rgba(37,99,235,.20);
+
+}
+
+.quick-actions button:hover{
+
+    transform:translateY(-4px);
+
+    background:#1d4ed8;
+
+}
+
+/*==========================================================
+STATISTICS GRID
+==========================================================*/
+
+.dashboard-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+    gap:25px;
+
+    margin-bottom:35px;
+
+}
+
+.dashboard-card{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+    transition:.35s;
+
+}
+
+.dashboard-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 18px 40px rgba(0,0,0,.15);
+
+}
+
+.card-top{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.card-icon{
+
+    width:70px;
+
+    height:70px;
+
+    border-radius:18px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    font-size:28px;
+
+}
+
+.dashboard-card h3{
+
+    color:#475569;
+
+    font-size:17px;
+
+    margin-bottom:8px;
+
+}
+
+.card-value{
+
+    font-size:34px;
+
+    font-weight:700;
+
+}
+
+.card-footer{
+
+    margin-top:25px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    color:#64748b;
+
+    font-size:14px;
+
+}
+
+
+/*==========================================================
+BOTTOM PANELS
+==========================================================*/
+
+.dashboard-bottom{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
+
+    gap:25px;
+
+    margin-bottom:35px;
+
+}
+
+.dashboard-panel{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:28px;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+    transition:.30s;
+
+}
+
+.dashboard-panel:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 18px 40px rgba(0,0,0,.12);
+
+}
+
+.dashboard-panel h2{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    color:#1e3a8a;
+
+    font-size:22px;
+
+    margin-bottom:20px;
+
+}
+
+.dashboard-panel p{
+
+    color:#64748b;
+
+    line-height:1.8;
+
+    font-size:15px;
+
+}
+
+/*==========================================================
+SYSTEM STATUS
+==========================================================*/
+
+.system-status{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+    gap:15px;
+
+    margin-top:25px;
+
+}
+
+.system-status div{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    background:#f8fafc;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    color:#334155;
+
+    border:1px solid #e2e8f0;
+
+    transition:.25s;
+
+}
+
+.system-status div:hover{
+
+    background:#eff6ff;
+
+    border-color:#2563eb;
+
+}
+
+.status-icon{
+
+    color:#16a34a;
+
+    font-size:18px;
+
+}
+
+/*==========================================================
+ACTIVITY LIST
+==========================================================*/
+
+.activity-list{
+
+    list-style:none;
+
+    margin-top:10px;
+
+}
+
+.activity-list li{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:14px 0;
+
+    border-bottom:1px solid #f1f5f9;
+
+    color:#475569;
+
+    font-size:15px;
+
+}
+
+.activity-list li:last-child{
+
+    border-bottom:none;
+
+}
+
+.activity-list svg{
+
+    color:#16a34a;
+
+    font-size:16px;
+
+}
+
+/*==========================================================
+ADMINISTRATOR TIPS
+==========================================================*/
+
+.dashboard-tips{
+
+    margin-top:10px;
+
+}
+
+.dashboard-tips h2{
+
+    color:#1e293b;
+
+    margin-bottom:22px;
+
+    font-size:28px;
+
+}
+
+.tips-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+
+    gap:22px;
+
+}
+
+.tip-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    border-top:5px solid #2563eb;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+    transition:.30s;
+
+}
+
+.tip-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 18px 35px rgba(0,0,0,.15);
+
+}
+
+.tip-card h3{
+
+    color:#2563eb;
+
+    margin-bottom:12px;
+
+    font-size:20px;
+
+}
+
+.tip-card p{
+
+    color:#64748b;
+
+    line-height:1.8;
+
+    font-size:15px;
+
+}
+
+/*==========================================================
+SCROLLBAR
+==========================================================*/
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#f1f5f9;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#2563eb;
+
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#1d4ed8;
+
+}
+
+/*==========================================================
+ANIMATIONS
+==========================================================*/
+
+.dashboard-card,
+.dashboard-panel,
+.tip-card{
+
+    animation:fadeUp .6s ease both;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(25px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/*==========================================================
+RESPONSIVE
+==========================================================*/
+
+@media (max-width:1200px){
+
+.dashboard-header{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+}
+
+.dashboard-date{
+
+    width:100%;
+
+}
+
+}
+
+@media (max-width:992px){
+
+.admin-dashboard{
+
+    padding:25px;
+
+}
+
+.dashboard-grid{
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+}
+
+.dashboard-bottom{
+
+    grid-template-columns:1fr;
+
+}
+
+.tips-grid{
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+}
+
+}
+
+@media (max-width:768px){
+
+.dashboard-header h1{
+
+    font-size:30px;
+
+}
+
+.quick-actions{
+
+    flex-direction:column;
+
+}
+
+.quick-actions button{
+
+    width:100%;
+
+    justify-content:center;
+
+}
+
+.dashboard-card{
+
+    padding:20px;
+
+}
+
+.card-value{
+
+    font-size:28px;
+
+}
+
+.dashboard-panel{
+
+    padding:22px;
+
+}
+
+.dashboard-tips h2{
+
+    font-size:24px;
+
+}
+
+}
+
+@media (max-width:480px){
+
+.admin-dashboard{
+
+    padding:18px;
+
+}
+
+.dashboard-header h1{
+
+    font-size:26px;
+
+}
+
+.dashboard-panel h2{
+
+    font-size:20px;
+
+}
+
+.card-icon{
+
+    width:60px;
+
+    height:60px;
+
+    font-size:22px;
+
+}
+
+.card-value{
+
+    font-size:24px;
+
+}
+
+.dashboard-date{
+
+    padding:18px;
+
+}
+
+.tip-card{
+
+    padding:20px;
+
+}
+
+}

@@ -1,0 +1,356 @@
+/* ======================================================
+   PAGE
+====================================================== */
+
+.teacher-courses-page{
+    display:flex;
+    flex-direction:column;
+    gap:25px;
+    padding:25px;
+    animation:fadeIn .35s ease;
+}
+
+/* ======================================================
+   HEADER
+====================================================== */
+
+.teacher-courses-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.teacher-courses-header h1{
+    margin:0;
+    font-size:30px;
+    font-weight:700;
+    color:#1e293b;
+}
+
+.teacher-courses-header p{
+    margin-top:8px;
+    color:#64748b;
+    font-size:15px;
+}
+
+/* ======================================================
+   STATISTICS
+====================================================== */
+
+.teacher-course-stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:20px;
+}
+
+.stat-card{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:22px;
+    border-radius:16px;
+    background:#fff;
+    box-shadow:0 8px 25px rgba(0,0,0,.07);
+    transition:.25s;
+}
+
+.stat-card:hover{
+    transform:translateY(-4px);
+}
+
+.stat-icon{
+    width:62px;
+    height:62px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:24px;
+}
+
+.blue .stat-icon{
+    background:#2563eb;
+}
+
+.green .stat-icon{
+    background:#16a34a;
+}
+
+.orange .stat-icon{
+    background:#ea580c;
+}
+
+.stat-card h2{
+    margin:0;
+    font-size:28px;
+    color:#0f172a;
+}
+
+.stat-card span{
+    color:#64748b;
+    font-size:14px;
+}
+
+/* ======================================================
+   SEARCH
+====================================================== */
+
+.search-card{
+    background:#fff;
+    padding:18px;
+    border-radius:16px;
+    box-shadow:0 5px 18px rgba(0,0,0,.06);
+}
+
+.search-box{
+    position:relative;
+}
+
+.search-box input{
+    width:100%;
+    padding:14px 18px 14px 48px;
+    border:1px solid #dbe3ef;
+    border-radius:10px;
+    outline:none;
+    font-size:15px;
+    transition:.3s;
+}
+
+.search-box input:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+
+.search-icon{
+    position:absolute;
+    left:16px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#94a3b8;
+}
+
+/* ======================================================
+   TABLE
+====================================================== */
+
+.table-wrapper{
+    background:#fff;
+    border-radius:16px;
+    overflow:auto;
+    box-shadow:0 8px 25px rgba(0,0,0,.07);
+}
+
+.teacher-courses-table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:900px;
+}
+
+.teacher-courses-table thead{
+    background:#2563eb;
+}
+
+.teacher-courses-table th{
+    color:#fff;
+    padding:16px;
+    text-align:left;
+    font-weight:600;
+    font-size:14px;
+}
+
+.teacher-courses-table td{
+    padding:16px;
+    border-bottom:1px solid #edf2f7;
+    color:#334155;
+    vertical-align:middle;
+}
+
+.teacher-courses-table tbody tr{
+    transition:.2s;
+}
+
+.teacher-courses-table tbody tr:hover{
+    background:#f8fbff;
+}
+
+/* ======================================================
+   COURSE CELL
+====================================================== */
+
+.course-cell{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.course-avatar{
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    background:#2563eb;
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:700;
+    font-size:18px;
+    flex-shrink:0;
+}
+
+.course-info{
+    display:flex;
+    flex-direction:column;
+}
+
+.course-info strong{
+    color:#1e293b;
+    font-size:15px;
+}
+
+/* ======================================================
+   SUBJECT BADGE
+====================================================== */
+
+.subject-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:7px 14px;
+    border-radius:30px;
+    background:#eef6ff;
+    color:#2563eb;
+    font-weight:600;
+    font-size:14px;
+}
+
+/* ======================================================
+   EMPTY STATE
+====================================================== */
+
+.empty-state{
+    background:#fff;
+    padding:60px 20px;
+    border-radius:16px;
+    text-align:center;
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+}
+
+.empty-state svg{
+    font-size:70px;
+    color:#94a3b8;
+    margin-bottom:20px;
+}
+
+.empty-state h3{
+    margin:0;
+    color:#1e293b;
+    font-size:24px;
+}
+
+.empty-state p{
+    margin-top:12px;
+    color:#64748b;
+    font-size:15px;
+}
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+
+@media(max-width:992px){
+
+.teacher-course-stats{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media(max-width:768px){
+
+.teacher-course-stats{
+grid-template-columns:1fr;
+}
+
+.teacher-courses-page{
+padding:18px;
+}
+
+.teacher-courses-header{
+flex-direction:column;
+align-items:flex-start;
+}
+
+.teacher-courses-header h1{
+font-size:26px;
+}
+
+.search-box input{
+font-size:14px;
+}
+
+.teacher-courses-table{
+min-width:700px;
+}
+
+.course-avatar{
+width:40px;
+height:40px;
+font-size:16px;
+}
+
+}
+
+@media(max-width:480px){
+
+.teacher-courses-page{
+padding:14px;
+}
+
+.teacher-courses-header h1{
+font-size:22px;
+}
+
+.stat-card{
+padding:18px;
+}
+
+.stat-card h2{
+font-size:24px;
+}
+
+.stat-icon{
+width:54px;
+height:54px;
+font-size:20px;
+}
+
+.teacher-courses-table{
+min-width:620px;
+}
+
+}
+
+/* ======================================================
+   ANIMATION
+====================================================== */
+
+@keyframes fadeIn{
+
+from{
+
+opacity:0;
+transform:translateY(12px);
+
+}
+
+to{
+
+opacity:1;
+transform:translateY(0);
+
+}
+
+}

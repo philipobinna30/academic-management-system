@@ -28,7 +28,7 @@ python-multipart==0.0.9
 # -------------------- REPORTING --------------------
 reportlab==4.1.0
 qrcode[pil]==7.4.2
-Pillow==10.2.0
+Pillow==11.3.0
 
 # -------------------- HTTP CLIENT (FIXED VERSIONS) --------------------
 requests==2.31.0

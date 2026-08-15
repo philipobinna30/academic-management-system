@@ -42,11 +42,6 @@ build/
 # ==========================
 .DS_Store
 Thumbs.db
-
-
-
-
-
 # ==========================
 # Generated Reports
 # ==========================
@@ -54,3 +49,14 @@ backend/generated_reports/
 backend/generated_reports/**
 backend/*.pdf
 backend/**/*.pdf
+# ==========================
+# Database backups
+# ==========================
+backend/database_backup/
+
+# ==========================
+# Temporary migration/testing scripts
+# ==========================
+backend/check_neon.py
+backend/check_neon.txt
+backend/compare_databases.py

@@ -2,10 +2,10 @@ from sqlalchemy import (
     Column, Integer, String, Boolean, ForeignKey,
     Float, DateTime, JSON, UniqueConstraint, func
 )
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 
-Base = declarative_base()
+from database import Base
 
 # =====================================================
 # USER

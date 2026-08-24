@@ -56,6 +56,8 @@ import MyResults from "./pages/student/MyResults";
 import MyTranscript from "./pages/student/MyTranscript";
 import StudentOnlineClasses from "./pages/student/StudentOnlineClasses";
 
+import VerifyEmail from "./pages/auth/VerifyEmail";
+
 // ======================================================
 // ROLE REDIRECT
 // ======================================================
@@ -135,27 +137,33 @@ const AppRoutes = () => {
       </Route>
 
       {/* STUDENT */}
-      <Route
-        path="/student"
-        element={
-          <ProtectedRoute role="student">
-            <StudentLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<StudentDashboard />} />
-        <Route path="profile" element={<MyProfile />} />
-        <Route path="results" element={<MyResults />} />
-        <Route path="transcript" element={<MyTranscript />} />
-        <Route path="online-classes" element={<StudentOnlineClasses />} />
-      </Route>
+<Route
+  path="/student"
+  element={
+    <ProtectedRoute role="student">
+      <StudentLayout />
+    </ProtectedRoute>
+  }
+>
+  <Route index element={<StudentDashboard />} />
+  <Route path="profile" element={<MyProfile />} />
+  <Route path="results" element={<MyResults />} />
+  <Route path="transcript" element={<MyTranscript />} />
+  <Route path="online-classes" element={<StudentOnlineClasses />} />
+</Route>
 
-      {/* FALLBACK */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+{/* EMAIL VERIFICATION */}
+<Route
+  path="/verify-email"
+  element={<VerifyEmail />}
+/>
+
+{/* FALLBACK */}
+<Route path="*" element={<Navigate to="/" replace />} />
+
+</Routes>
   );
 };
-
 // ======================================================
 // APP
 // ======================================================

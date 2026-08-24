@@ -1,4 +1,4 @@
-```jsx
+
 import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import axios from "axios";
@@ -82,4 +82,3 @@ const VerifyEmail = () => {
 };
 
 export default VerifyEmail;
-```

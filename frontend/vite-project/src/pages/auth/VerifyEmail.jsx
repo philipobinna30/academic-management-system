@@ -20,7 +20,7 @@ const VerifyEmail = () => {
     const verifyEmail = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/auth/verify-email",
+          "https://academic-management-system-o8zf.onrender.com/auth/verify-email",
           {
             params: { token },
           }

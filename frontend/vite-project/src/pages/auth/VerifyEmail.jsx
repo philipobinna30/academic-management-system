@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import axios from "axios";
@@ -51,7 +50,9 @@ const VerifyEmail = () => {
         {status === "loading" && (
           <>
             <h1>Verifying Your Email</h1>
-            <p>Please wait while we verify your email address...</p>
+            <p>
+              Please wait while we verify your email address...
+            </p>
           </>
         )}
 

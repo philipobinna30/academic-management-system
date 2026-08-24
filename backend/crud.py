@@ -131,8 +131,9 @@ router = APIRouter(
 )
 
 APP_URL = os.getenv("APP_URL", "http://localhost:8000")
-SCHOOL_LOGO_PATH = "static/logo.png"
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
+SCHOOL_LOGO_PATH = "static/logo.png"
 SCHOOL_NAME = "MY APO SECONDARY SCHOOL"
 SCHOOL_MOTTO = "The Sky Is Your Limit"
 SCHOOL_ADDRESS = "Km 45 Lekki Epe Expressway"
@@ -5286,7 +5287,10 @@ def create_student(
     db.commit()
 
     token = create_verification_token(student.email)
-    link = f"{APP_URL}/auth/verify-email?token={token}"
+    link = (
+    f"{FRONTEND_URL}/verify-email"
+    f"?token={token}"
+)
 
     background_tasks.add_task(
         send_email,

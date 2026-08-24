@@ -675,9 +675,10 @@ def send_verification(
     )
 
     link = (
-        f"{APP_URL}/auth/verify-email"
-        f"?token={token}"
-    )
+    f"{FRONTEND_URL}/verify-email"
+    f"?token={token}"
+)
+    
 
     send_email(
         user.email,

@@ -29,7 +29,7 @@ const VerifyEmail = () => {
         setStatus("success");
         setMessage(
           response.data?.message ||
-            "Your email has been successfully verified."
+            "Email verified successfully"
         );
       } catch (error) {
         setStatus("error");
@@ -45,38 +45,53 @@ const VerifyEmail = () => {
   }, [searchParams]);
 
   return (
-    <main className="auth-page">
-      <div className="auth-container">
+    <main className="verify-email-page">
+      <div className="verify-email-container">
+
         {status === "loading" && (
-          <>
+          <div className="verify-email-content">
             <h1>Verifying Your Email</h1>
+
             <p>
               Please wait while we verify your email address...
             </p>
-          </>
+          </div>
         )}
 
         {status === "success" && (
-          <>
+          <div className="verify-email-content success">
+            <div className="verify-icon">✓</div>
+
             <h1>Email Verified Successfully</h1>
+
             <p>{message}</p>
 
-            <Link to="/login" className="auth-button">
+            <Link
+              to="/login"
+              className="verify-email-button"
+            >
               Continue to Login
             </Link>
-          </>
+          </div>
         )}
 
         {status === "error" && (
-          <>
+          <div className="verify-email-content error">
+            <div className="verify-icon">!</div>
+
             <h1>Verification Failed</h1>
+
             <p>{message}</p>
 
-            <Link to="/login" className="auth-button">
+            <Link
+              to="/login"
+              className="verify-email-button"
+            >
               Back to Login
             </Link>
-          </>
+          </div>
         )}
+
       </div>
     </main>
   );

@@ -1,3 +1,4 @@
+
 import API from "./api";
 
 // ======================================================
@@ -32,7 +33,19 @@ const normalizeStudent = (student) => {
   if (!student) return null;
 
   return {
-    id: student?.id ?? null,
+    // ==================================================
+    // STUDENT PROFILE INFORMATION
+    // ==================================================
+
+    id:
+      student?.id ??
+      student?.student_profile_id ??
+      null,
+
+    user_id:
+      student?.user_id ??
+      student?.user?.id ??
+      null,
 
     full_name:
       student?.user?.full_name ||
@@ -46,7 +59,42 @@ const normalizeStudent = (student) => {
 
     role:
       student?.user?.role ||
+      student?.role ||
       "student",
+
+    // ==================================================
+    // ACCOUNT STATUS
+    // ==================================================
+
+    is_active:
+      student?.is_active ??
+      student?.user?.is_active ??
+      true,
+
+    is_verified:
+      student?.is_verified ??
+      student?.email_verified ??
+      student?.user?.is_verified ??
+      student?.user?.email_verified ??
+      false,
+
+    // Keep email_verified as well so the frontend can
+    // safely read either field.
+    email_verified:
+      student?.email_verified ??
+      student?.is_verified ??
+      student?.user?.email_verified ??
+      student?.user?.is_verified ??
+      false,
+
+    created_at:
+      student?.created_at ??
+      student?.user?.created_at ??
+      null,
+
+    // ==================================================
+    // COURSE INFORMATION
+    // ==================================================
 
     course_id:
       student?.course_id ??
@@ -55,7 +103,21 @@ const normalizeStudent = (student) => {
 
     course_name:
       student?.course?.name ||
+      student?.course_name ||
       "N/A",
+
+    // ==================================================
+    // PARENT INFORMATION
+    // ==================================================
+
+    parent_id:
+      student?.parent_id ??
+      student?.parent?.id ??
+      null,
+
+    // ==================================================
+    // ACADEMIC PERFORMANCE
+    // ==================================================
 
     total_score:
       student?.total_score ?? 0,
@@ -67,10 +129,16 @@ const normalizeStudent = (student) => {
       student?.gpa ?? 0,
 
     position:
-      student?.position ?? null,
+      student?.position ??
+      student?.academic_position ??
+      student?.rank ??
+      null,
 
     remarks:
-      student?.remarks ?? "",
+      student?.remarks ??
+      student?.comment ??
+      student?.note ??
+      "",
   };
 };
 
@@ -351,3 +419,4 @@ export default {
   printStudentResult,
   printStudentTranscript,
 };
+

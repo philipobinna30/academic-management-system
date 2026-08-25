@@ -3,7 +3,27 @@
   min-height: 100vh;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
+
+/* ======================================================
+   GLOBAL BOX SIZING
+   ====================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-width: 320px;
+  min-height: 100%;
+}
+
 
 /* ======================================================
    DEFAULT VITE STYLES
@@ -63,57 +83,119 @@
   justify-content: center;
 
   padding: 24px;
+
   box-sizing: border-box;
 
-  background: #f5f7fb;
+  /*
+   * Light blue/gray background gives clear contrast
+   * against the white verification card.
+   */
+  background: #e8eef7 !important;
+
+  color: #1f2937 !important;
 }
+
+
+/* ======================================================
+   VERIFICATION CONTAINER
+   ====================================================== */
 
 .verify-email-container {
   width: 100%;
   max-width: 520px;
 
-  background: #ffffff;
+  background: #ffffff !important;
 
-  border-radius: 16px;
+  border: 1px solid #dbe3ef;
 
-  padding: 40px 30px;
+  border-radius: 18px;
+
+  padding: 42px 32px;
 
   box-sizing: border-box;
 
   text-align: center;
 
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 12px 35px rgba(15, 23, 42, 0.12),
+    0 2px 8px rgba(15, 23, 42, 0.06);
 }
 
+
+/* ======================================================
+   VERIFICATION CONTENT
+   ====================================================== */
+
 .verify-email-content {
-  color: #1f2937;
+  color: #1f2937 !important;
 }
+
+
+/* ======================================================
+   VERIFICATION HEADING
+   ====================================================== */
 
 .verify-email-content h1 {
   margin: 0 0 16px;
 
-  color: #111827;
+  color: #111827 !important;
 
   font-size: 28px;
+
   line-height: 1.3;
+
   font-weight: 700;
 }
+
+
+/* ======================================================
+   VERIFICATION MESSAGE
+   ====================================================== */
 
 .verify-email-content p {
   margin: 0 0 28px;
 
-  color: #4b5563;
+  color: #374151 !important;
 
   font-size: 16px;
+
   line-height: 1.6;
+
+  font-weight: 400;
+}
+
+
+/* ======================================================
+   SUCCESS STATE
+   ====================================================== */
+
+.verify-email-content.success {
+  color: #1f2937 !important;
 }
 
 .verify-email-content.success h1 {
-  color: #166534;
+  color: #166534 !important;
+}
+
+.verify-email-content.success p {
+  color: #374151 !important;
+}
+
+
+/* ======================================================
+   ERROR STATE
+   ====================================================== */
+
+.verify-email-content.error {
+  color: #1f2937 !important;
 }
 
 .verify-email-content.error h1 {
-  color: #b91c1c;
+  color: #b91c1c !important;
+}
+
+.verify-email-content.error p {
+  color: #374151 !important;
 }
 
 
@@ -122,10 +204,10 @@
    ====================================================== */
 
 .verify-icon {
-  width: 64px;
-  height: 64px;
+  width: 68px;
+  height: 68px;
 
-  margin: 0 auto 20px;
+  margin: 0 auto 22px;
 
   border-radius: 50%;
 
@@ -134,15 +216,27 @@
   justify-content: center;
 
   font-size: 34px;
+
   font-weight: 700;
 
-  color: #ffffff;
+  color: #ffffff !important;
 
-  background: #16a34a;
+  background: #16a34a !important;
+
+  box-shadow:
+    0 6px 18px rgba(22, 163, 74, 0.25);
 }
 
+
+/* ======================================================
+   ERROR ICON
+   ====================================================== */
+
 .verify-email-content.error .verify-icon {
-  background: #dc2626;
+  background: #dc2626 !important;
+
+  box-shadow:
+    0 6px 18px rgba(220, 38, 38, 0.25);
 }
 
 
@@ -158,33 +252,82 @@
 
   min-height: 48px;
 
-  padding: 12px 24px;
+  padding: 12px 26px;
+
+  border: none;
 
   border-radius: 8px;
 
-  background: #2563eb;
+  background: #2563eb !important;
 
   color: #ffffff !important;
 
-  text-decoration: none;
+  text-decoration: none !important;
 
   font-size: 15px;
+
   font-weight: 600;
+
+  line-height: 1.2;
 
   box-sizing: border-box;
 
+  cursor: pointer;
+
   transition:
+    background 0.2s ease,
     opacity 0.2s ease,
     transform 0.2s ease;
 }
 
+
+/* ======================================================
+   BUTTON HOVER
+   ====================================================== */
+
 .verify-email-button:hover {
-  opacity: 0.9;
+  background: #1d4ed8 !important;
+
+  color: #ffffff !important;
+
+  opacity: 1;
+
   transform: translateY(-1px);
 }
 
+
+/* ======================================================
+   BUTTON ACTIVE
+   ====================================================== */
+
 .verify-email-button:active {
+  background: #1e40af !important;
+
+  color: #ffffff !important;
+
   transform: translateY(0);
+}
+
+
+/* ======================================================
+   BUTTON FOCUS
+   ====================================================== */
+
+.verify-email-button:focus {
+  outline: 3px solid rgba(37, 99, 235, 0.25);
+
+  outline-offset: 3px;
+
+  color: #ffffff !important;
+}
+
+
+/* ======================================================
+   BUTTON VISITED
+   ====================================================== */
+
+.verify-email-button:visited {
+  color: #ffffff !important;
 }
 
 
@@ -198,39 +341,89 @@
     min-height: 100dvh;
 
     padding: 16px;
+
+    background: #e8eef7 !important;
   }
 
   .verify-email-container {
     width: 100%;
 
-    padding: 32px 20px;
+    max-width: 520px;
 
-    border-radius: 12px;
+    padding: 34px 22px;
+
+    border-radius: 14px;
+
+    background: #ffffff !important;
+  }
+
+  .verify-email-content {
+    color: #1f2937 !important;
   }
 
   .verify-email-content h1 {
+    margin-bottom: 14px;
+
+    color: #111827 !important;
+
     font-size: 24px;
-    line-height: 1.3;
+
+    line-height: 1.35;
   }
 
   .verify-email-content p {
+    margin-bottom: 24px;
+
+    color: #374151 !important;
+
     font-size: 15px;
+
     line-height: 1.6;
   }
 
+  .verify-email-content.success h1 {
+    color: #166534 !important;
+  }
+
+  .verify-email-content.success p {
+    color: #374151 !important;
+  }
+
+  .verify-email-content.error h1 {
+    color: #b91c1c !important;
+  }
+
+  .verify-email-content.error p {
+    color: #374151 !important;
+  }
+
   .verify-icon {
-    width: 58px;
-    height: 58px;
+    width: 62px;
+    height: 62px;
+
+    margin-bottom: 18px;
 
     font-size: 30px;
 
-    margin-bottom: 18px;
+    color: #ffffff !important;
+
+    background: #16a34a !important;
+  }
+
+  .verify-email-content.error .verify-icon {
+    background: #dc2626 !important;
   }
 
   .verify-email-button {
     width: 100%;
 
-    min-height: 48px;
+    min-height: 50px;
+
+    padding: 13px 20px;
+
+    color: #ffffff !important;
+
+    background: #2563eb !important;
   }
 }
 
@@ -242,17 +435,64 @@
 @media (max-width: 380px) {
   .verify-email-page {
     padding: 12px;
+
+    background: #e8eef7 !important;
   }
 
   .verify-email-container {
-    padding: 28px 16px;
+    padding: 28px 18px;
+
+    border-radius: 12px;
+
+    background: #ffffff !important;
   }
 
   .verify-email-content h1 {
     font-size: 22px;
+
+    color: #111827 !important;
   }
 
   .verify-email-content p {
     font-size: 14px;
+
+    color: #374151 !important;
+  }
+
+  .verify-icon {
+    width: 58px;
+    height: 58px;
+
+    font-size: 28px;
+  }
+
+  .verify-email-button {
+    min-height: 48px;
+
+    font-size: 14px;
+
+    color: #ffffff !important;
+  }
+}
+
+
+/* ======================================================
+   MOBILE LANDSCAPE / SHORT SCREENS
+   ====================================================== */
+
+@media (max-height: 600px) and (orientation: landscape) {
+  .verify-email-page {
+    align-items: flex-start;
+
+    padding-top: 24px;
+    padding-bottom: 24px;
+
+    overflow-y: auto;
+  }
+
+  .verify-email-container {
+    margin: 0 auto;
+
+    padding: 28px 24px;
   }
 }
